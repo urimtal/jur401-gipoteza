@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Гипотеза тренажері</title>
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--ink:#1d1d1b;--mute:#6b6a64;--line:#e2e0d8;--acc:#1f5f8b;--ok:#1e7a46;--bad:#b3261e;--warn:#8a5a00;--code:#f0efe9;--tip:#fff7e0;--tipline:#e9d79c;--hl1:#e3effa;--hl2:#fdeee0;--hl3:#e6f4ea;--hl4:#f1e9f7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--card:#201f1d;--ink:#ecebe6;--mute:#a09e96;--line:#34332f;--acc:#7cb4dc;--ok:#6cc98f;--bad:#f08a80;--warn:#e0b45a;--code:#2a2926;--tip:#2b2618;--tipline:#5a4d27;--hl1:#1d2b38;--hl2:#3a2a1c;--hl3:#1c3324;--hl4:#2e2338}}
+:root[data-theme="dark"]{--bg:#161615;--card:#201f1d;--ink:#ecebe6;--mute:#a09e96;--line:#34332f;--acc:#7cb4dc;--ok:#6cc98f;--bad:#f08a80;--warn:#e0b45a;--code:#2a2926;--tip:#2b2618;--tipline:#5a4d27;--hl1:#1d2b38;--hl2:#3a2a1c;--hl3:#1c3324;--hl4:#2e2338}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:760px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.6rem;margin:0 0 4px}
+h2{font-size:1.15rem;margin:0 0 12px}
+h3{font-size:1rem;margin:18px 0 6px}
+.sub{color:var(--mute);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:0 0 16px;scroll-margin-top:60px}
+label{display:block;font-weight:600;margin:14px 0 6px}
+input,select,textarea{font:inherit;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+textarea{min-height:70px;resize:vertical}
+button{font:inherit;font-weight:600;padding:10px 18px;border:0;border-radius:8px;background:var(--acc);color:#fff;cursor:pointer;margin-top:14px}
+button.ghost{background:transparent;color:var(--acc);border:1px solid var(--acc)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media (max-width:520px){.grid2{grid-template-columns:1fr}}
+code,pre{background:var(--code);border-radius:6px;font-family:ui-monospace,Menlo,monospace;font-size:.9em}
+code{padding:1px 5px}pre{padding:10px 12px;overflow-x:auto;white-space:pre-wrap}
+ol li,ul li{margin-bottom:6px}
+.fb{font-size:.92rem;margin-top:4px;min-height:1.2em}
+.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}.fb.warn{color:var(--warn)}
+.fb .more{color:var(--ink);background:var(--tip);border:1px solid var(--tipline);border-radius:8px;padding:8px 10px;margin-top:6px}
+.fb .more b{display:block;margin-bottom:2px}
+.fb .extra{color:var(--mute);margin-top:4px}
+.fb ul{margin:4px 0 0;padding-left:20px}
+.hidden{display:none}
+.note{color:var(--mute);font-size:.92rem}
+.lang{display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px}
+.lang button{margin:0;padding:4px 12px;font-size:.85rem;background:transparent;color:var(--acc);border:1px solid var(--acc)}
+.lang button.on{background:var(--acc);color:#fff}
+.ex{width:100%;border-collapse:collapse;margin:8px 0 4px;font-size:.93rem}
+.ex th,.ex td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:right}
+.ex th:first-child,.ex td:first-child{text-align:left}
+.ex th{color:var(--mute);font-weight:600}
+.tw{overflow-x:auto}
+.key{border-left:3px solid var(--acc);padding:2px 0 2px 12px;margin:10px 0}
+nav.steps{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;margin:0 0 12px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+nav.steps a{font-size:.85rem;text-decoration:none;color:var(--acc);border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--card)}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.item{border-top:1px solid var(--line);padding:12px 0}
+.item:first-child{border-top:0}
+.item .q{font-weight:600;margin-bottom:6px}
+.item .sec{font-size:.78rem;color:var(--mute);font-weight:400;margin-left:6px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts.col{flex-direction:column}
+.opts label{display:flex;gap:8px;align-items:flex-start;font-weight:400;margin:0;padding:6px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--bg)}
+.opts label.sel{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}
+.opts input{width:auto;margin-top:4px}
+.chk label{display:flex;gap:8px;font-weight:400;margin:6px 0}
+.chk input{width:auto;margin-top:4px}
+.preview{background:var(--code);border-radius:8px;padding:10px 12px;margin-top:10px;min-height:2.6em}
+.preview .gap{color:var(--bad)}
+.story{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--bg)}
+.story h3{margin-top:0;font-size:1.1rem}
+.story p{margin:8px 0;padding:6px 8px;border-radius:6px}
+.story .lab{display:block;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mute)}
+.p-lead{background:var(--hl1)}.p-nut{background:var(--hl2)}.p-ev{background:var(--hl3)}.p-src{background:var(--hl4);font-size:.9rem}
+.badge{display:inline-block;font-size:.78rem;font-weight:700;border:1px solid var(--warn);color:var(--warn);border-radius:6px;padding:1px 8px;margin-bottom:8px}
+.num{display:grid;grid-template-columns:1fr 130px;gap:6px 12px;align-items:center;margin-top:10px}
+.num label{margin:0;font-weight:500}
+.num .fb{grid-column:1/-1;margin-top:0}
+@media (max-width:520px){.num{grid-template-columns:1fr 100px}}
+.score{font-weight:600;margin-top:8px}
+</style>
+</head>
+<body>
+<main>
+<div class="lang"><button id="lkk" class="on">ҚАЗ</button><button id="len">ENG</button></div>
+<h1 data-i="h1"></h1>
+<p class="sub" data-i="sub"></p>
+<nav class="steps" id="nav"></nav>
+
+<section class="card">
+ <p data-i="intro"></p>
+ <p class="note" data-i="privacy"></p>
+</section>
+
+<!-- 1 -->
+<section class="card" id="s1">
+ <span class="tag" data-i="s1tag"></span>
+ <h2 data-i="s1h"></h2>
+ <div data-i="s1t"></div>
+ <label for="art_sector" data-i="art_sectorL"></label>
+ <select id="art_sector" data-k="art_sector"></select>
+ <label for="art_link" data-i="art_linkL"></label>
+ <input id="art_link" data-k="art_link" inputmode="url" autocomplete="off">
+ <label for="art_number" data-i="art_numberL"></label>
+ <textarea id="art_number" data-k="art_number" data-ph="art_numberPh"></textarea>
+ <h3 data-i="s1chkH"></h3>
+ <div class="chk">
+  <label><input type="checkbox" data-k="art_c1"><span data-i="art_c1"></span></label>
+  <label><input type="checkbox" data-k="art_c2"><span data-i="art_c2"></span></label>
+  <label><input type="checkbox" data-k="art_c3"><span data-i="art_c3"></span></label>
+  <label><input type="checkbox" data-k="art_c4"><span data-i="art_c4"></span></label>
+ </div>
+ <button id="b_s1" data-i="checkB"></button>
+ <div class="fb" id="f_s1"></div>
+</section>
+
+<!-- 2 -->
+<section class="card" id="s2">
+ <span class="tag" data-i="s2tag"></span>
+ <h2 data-i="s2h"></h2>
+ <div data-i="s2t"></div>
+ <h3 data-i="exOriginH"></h3>
+ <p class="note" data-i="exOriginNote"></p>
+ <div id="ex_origin"></div>
+ <button data-check="origin" data-i="checkB"></button>
+ <div class="score" id="sc_origin"></div>
+ <h3 data-i="s2ownH"></h3>
+ <label for="or_body" data-i="or_bodyL"></label>
+ <input id="or_body" data-k="or_body" data-ph="or_bodyPh">
+ <label for="or_table" data-i="or_tableL"></label>
+ <input id="or_table" data-k="or_table" data-ph="or_tablePh">
+ <div class="grid2">
+  <div><label for="or_years" data-i="or_yearsL"></label><input id="or_years" data-k="or_years" data-ph="yearsPh"></div>
+  <div><label for="or_level" data-i="or_levelL"></label><select id="or_level" data-k="or_level" data-opts="levels"></select></div>
+ </div>
+ <label for="or_type" data-i="or_typeL"></label>
+ <select id="or_type" data-k="or_type" data-opts="srcTypes"></select>
+ <label for="or_primary" data-i="or_primaryL"></label>
+ <select id="or_primary" data-k="or_primary" data-opts="primary"></select>
+ <button id="b_s2" data-i="checkB"></button>
+ <div class="fb" id="f_s2"></div>
+</section>
+
+<!-- 3 -->
+<section class="card" id="s3">
+ <span class="tag" data-i="s3tag"></span>
+ <h2 data-i="s3h"></h2>
+ <div data-i="s3t"></div>
+ <h3 data-i="exSortH"></h3>
+ <p class="note" data-i="exSortNote"></p>
+ <div id="ex_sort"></div>
+ <button data-check="sort" data-i="checkB"></button>
+ <div class="score" id="sc_sort"></div>
+ <h3 data-i="bH"></h3>
+ <p class="note" data-i="bNote"></p>
+ <label for="b_where" data-i="b_whereL"></label>
+ <input id="b_where" data-k="b_where" data-ph="b_wherePh">
+ <div class="grid2">
+  <div><label for="b_level" data-i="b_levelL"></label><select id="b_level" data-k="b_level" data-opts="levels"></select></div>
+  <div><label for="b_kind" data-i="b_kindL"></label><select id="b_kind" data-k="b_kind" data-opts="kinds"></select></div>
+ </div>
+ <label for="b_what" data-i="b_whatL"></label>
+ <input id="b_what" data-k="b_what" data-ph="b_whatPh">
+ <label for="b_unit" data-i="b_unitL"></label>
+ <input id="b_unit" data-k="b_unit" data-ph="b_unitPh">
+ <label for="b_change" data-i="b_changeL"></label>
+ <input id="b_change" data-k="b_change" data-ph="b_changePh">
+ <div class="grid2">
+  <div><label for="b_from" data-i="b_fromL"></label><input id="b_from" data-k="b_from" inputmode="numeric" maxlength="4" placeholder="2017"></div>
+  <div><label for="b_to" data-i="b_toL"></label><input id="b_to" data-k="b_to" inputmode="numeric" maxlength="4" placeholder="2019"></div>
+ </div>
+ <label for="b_cmp" data-i="b_cmpL"></label>
+ <input id="b_cmp" data-k="b_cmp" data-ph="b_cmpPh">
+ <label for="b_why" data-i="b_whyL"></label>
+ <input id="b_why" data-k="b_why" data-ph="b_whyPh">
+ <div class="preview" id="b_preview"></div>
+ <label for="hyp_final" data-i="hyp_finalL"></label>
+ <textarea id="hyp_final" data-k="hyp_final" data-ph="hyp_finalPh"></textarea>
+ <div class="row"><button id="b_fill" class="ghost" data-i="b_fillB"></button><button id="b_s3" data-i="checkB"></button></div>
+ <div class="fb" id="f_s3"></div>
+</section>
+
+<!-- 4 -->
+<section class="card" id="s4">
+ <span class="tag" data-i="s4tag"></span>
+ <h2 data-i="s4h"></h2>
+ <div data-i="s4t"></div>
+ <h3 data-i="exNullH"></h3>
+ <p class="note" data-i="exNullNote"></p>
+ <div id="ex_null"></div>
+ <button data-check="null" data-i="checkB"></button>
+ <div class="score" id="sc_null"></div>
+ <h3 data-i="s4ownH"></h3>
+ <p class="note" id="s4hyp"></p>
+ <label for="null_line" data-i="null_lineL"></label>
+ <textarea id="null_line" data-k="null_line" data-ph="null_linePh"></textarea>
+ <label for="null_thr" data-i="null_thrL"></label>
+ <input id="null_thr" data-k="null_thr" data-ph="null_thrPh">
+ <label for="null_h0" data-i="null_h0L"></label>
+ <textarea id="null_h0" data-k="null_h0" data-ph="null_h0Ph"></textarea>
+ <button id="b_s4" data-i="checkB"></button>
+ <div class="fb" id="f_s4"></div>
+</section>
+
+<!-- 5 -->
+<section class="card" id="s5">
+ <span class="tag" data-i="s5tag"></span>
+ <h2 data-i="s5h"></h2>
+ <div data-i="s5t"></div>
+ <div class="tw" id="t_table"></div>
+ <p class="note" data-i="t_src"></p>
+ <div id="ex_num"></div>
+ <button id="b_num" data-i="checkB"></button>
+ <div class="score" id="sc_num"></div>
+ <h3 data-i="decH"></h3>
+ <div id="ex_dec"></div>
+ <button data-check="dec" data-i="checkB"></button>
+ <div class="score" id="sc_dec"></div>
+ <h3 data-i="s5ownH"></h3>
+ <label for="own_numbers" data-i="own_numbersL"></label>
+ <textarea id="own_numbers" data-k="own_numbers" data-ph="own_numbersPh"></textarea>
+ <label for="own_verdict" data-i="own_verdictL"></label>
+ <select id="own_verdict" data-k="own_verdict" data-opts="verdicts"></select>
+ <label for="own_verdict_num" data-i="own_verdict_numL"></label>
+ <input id="own_verdict_num" data-k="own_verdict_num" data-ph="own_verdict_numPh">
+</section>
+
+<!-- 6 -->
+<section class="card" id="s6">
+ <span class="tag" data-i="s6tag"></span>
+ <h2 data-i="s6h"></h2>
+ <div data-i="s6t"></div>
+ <div id="ex_extra"></div>
+ <button data-check="extra" data-i="checkB"></button>
+ <div class="score" id="sc_extra"></div>
+ <h3 data-i="s6ownH"></h3>
+ <label for="ex_alt" data-i="ex_altL"></label>
+ <textarea id="ex_alt" data-k="ex_alt" data-ph="ex_altPh"></textarea>
+ <label for="ex_data2" data-i="ex_data2L"></label>
+ <textarea id="ex_data2" data-k="ex_data2" data-ph="ex_data2Ph"></textarea>
+</section>
+
+<!-- 7 -->
+<section class="card" id="s7">
+ <span class="tag" data-i="s7tag"></span>
+ <h2 data-i="s7h"></h2>
+ <div data-i="s7t"></div>
+ <div id="story"></div>
+ <h3 data-i="s7ownH"></h3>
+ <p class="note" data-i="s7ownNote"></p>
+ <label for="st_lead" data-i="st_leadL"></label>
+ <textarea id="st_lead" data-k="st_lead"></textarea>
+ <label for="st_nut" data-i="st_nutL"></label>
+ <textarea id="st_nut" data-k="st_nut"></textarea>
+ <label for="st_src" data-i="st_srcL"></label>
+ <textarea id="st_src" data-k="st_src"></textarea>
+ <button id="b_s7" data-i="checkB"></button>
+ <div class="fb" id="f_s7"></div>
+</section>
+
+<!-- worksheet -->
+<section class="card" id="ws">
+ <span class="tag" data-i="wsTag"></span>
+ <h2 data-i="wsH"></h2>
+ <p data-i="wsT"></p>
+ <label for="ws_name" data-i="ws_nameL"></label>
+ <input id="ws_name" data-k="ws_name" autocomplete="off">
+ <pre id="ws_out"></pre>
+ <div class="row">
+  <button id="ws_copy" data-i="wsCopy"></button>
+  <button id="ws_dl" data-i="wsDl"></button>
+  <button id="ws_clear" class="ghost" data-i="wsClear"></button>
+ </div>
+ <div class="fb" id="f_ws"></div>
+</section>
+<p class="note" data-i="foot"></p>
+</main>
+<script src="tx_kk.js"></script>
+<script src="tx_en.js"></script>
+<script src="data.js"></script>
+<script src="err.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

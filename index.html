@@ -1,0 +1,1538 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Гипотеза тренажері</title>
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--ink:#1d1d1b;--mute:#6b6a64;--line:#e2e0d8;--acc:#1f5f8b;--ok:#1e7a46;--bad:#b3261e;--warn:#8a5a00;--code:#f0efe9;--tip:#fff7e0;--tipline:#e9d79c;--hl1:#e3effa;--hl2:#fdeee0;--hl3:#e6f4ea;--hl4:#f1e9f7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--card:#201f1d;--ink:#ecebe6;--mute:#a09e96;--line:#34332f;--acc:#7cb4dc;--ok:#6cc98f;--bad:#f08a80;--warn:#e0b45a;--code:#2a2926;--tip:#2b2618;--tipline:#5a4d27;--hl1:#1d2b38;--hl2:#3a2a1c;--hl3:#1c3324;--hl4:#2e2338}}
+:root[data-theme="dark"]{--bg:#161615;--card:#201f1d;--ink:#ecebe6;--mute:#a09e96;--line:#34332f;--acc:#7cb4dc;--ok:#6cc98f;--bad:#f08a80;--warn:#e0b45a;--code:#2a2926;--tip:#2b2618;--tipline:#5a4d27;--hl1:#1d2b38;--hl2:#3a2a1c;--hl3:#1c3324;--hl4:#2e2338}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:760px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:1.6rem;margin:0 0 4px}
+h2{font-size:1.15rem;margin:0 0 12px}
+h3{font-size:1rem;margin:18px 0 6px}
+.sub{color:var(--mute);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin:0 0 16px;scroll-margin-top:60px}
+label{display:block;font-weight:600;margin:14px 0 6px}
+input,select,textarea{font:inherit;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+textarea{min-height:70px;resize:vertical}
+button{font:inherit;font-weight:600;padding:10px 18px;border:0;border-radius:8px;background:var(--acc);color:#fff;cursor:pointer;margin-top:14px}
+button.ghost{background:transparent;color:var(--acc);border:1px solid var(--acc)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+@media (max-width:520px){.grid2{grid-template-columns:1fr}}
+code,pre{background:var(--code);border-radius:6px;font-family:ui-monospace,Menlo,monospace;font-size:.9em}
+code{padding:1px 5px}pre{padding:10px 12px;overflow-x:auto;white-space:pre-wrap}
+ol li,ul li{margin-bottom:6px}
+.fb{font-size:.92rem;margin-top:4px;min-height:1.2em}
+.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}.fb.warn{color:var(--warn)}
+.fb .more{color:var(--ink);background:var(--tip);border:1px solid var(--tipline);border-radius:8px;padding:8px 10px;margin-top:6px}
+.fb .more b{display:block;margin-bottom:2px}
+.fb .extra{color:var(--mute);margin-top:4px}
+.fb ul{margin:4px 0 0;padding-left:20px}
+.hidden{display:none}
+.note{color:var(--mute);font-size:.92rem}
+.lang{display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px}
+.lang button{margin:0;padding:4px 12px;font-size:.85rem;background:transparent;color:var(--acc);border:1px solid var(--acc)}
+.lang button.on{background:var(--acc);color:#fff}
+.ex{width:100%;border-collapse:collapse;margin:8px 0 4px;font-size:.93rem}
+.ex th,.ex td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:right}
+.ex th:first-child,.ex td:first-child{text-align:left}
+.ex th{color:var(--mute);font-weight:600}
+.tw{overflow-x:auto}
+.key{border-left:3px solid var(--acc);padding:2px 0 2px 12px;margin:10px 0}
+nav.steps{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;margin:0 0 12px;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+nav.steps a{font-size:.85rem;text-decoration:none;color:var(--acc);border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--card)}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mute);margin-bottom:4px}
+.item{border-top:1px solid var(--line);padding:12px 0}
+.item:first-child{border-top:0}
+.item .q{font-weight:600;margin-bottom:6px}
+.item .sec{font-size:.78rem;color:var(--mute);font-weight:400;margin-left:6px}
+.opts{display:flex;flex-wrap:wrap;gap:6px}
+.opts.col{flex-direction:column}
+.opts label{display:flex;gap:8px;align-items:flex-start;font-weight:400;margin:0;padding:6px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--bg)}
+.opts label.sel{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}
+.opts input{width:auto;margin-top:4px}
+.chk label{display:flex;gap:8px;font-weight:400;margin:6px 0}
+.chk input{width:auto;margin-top:4px}
+.preview{background:var(--code);border-radius:8px;padding:10px 12px;margin-top:10px;min-height:2.6em}
+.preview .gap{color:var(--bad)}
+.story{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--bg)}
+.story h3{margin-top:0;font-size:1.1rem}
+.story p{margin:8px 0;padding:6px 8px;border-radius:6px}
+.story .lab{display:block;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mute)}
+.p-lead{background:var(--hl1)}.p-nut{background:var(--hl2)}.p-ev{background:var(--hl3)}.p-src{background:var(--hl4);font-size:.9rem}
+.badge{display:inline-block;font-size:.78rem;font-weight:700;border:1px solid var(--warn);color:var(--warn);border-radius:6px;padding:1px 8px;margin-bottom:8px}
+.num{display:grid;grid-template-columns:1fr 130px;gap:6px 12px;align-items:center;margin-top:10px}
+.num label{margin:0;font-weight:500}
+.num .fb{grid-column:1/-1;margin-top:0}
+@media (max-width:520px){.num{grid-template-columns:1fr 100px}}
+.score{font-weight:600;margin-top:8px}
+</style>
+</head>
+<body>
+<main>
+<div class="lang"><button id="lkk" class="on">ҚАЗ</button><button id="len">ENG</button></div>
+<h1 data-i="h1"></h1>
+<p class="sub" data-i="sub"></p>
+<nav class="steps" id="nav"></nav>
+
+<section class="card">
+ <p data-i="intro"></p>
+ <p class="note" data-i="privacy"></p>
+</section>
+
+<!-- 1 -->
+<section class="card" id="s1">
+ <span class="tag" data-i="s1tag"></span>
+ <h2 data-i="s1h"></h2>
+ <div data-i="s1t"></div>
+ <label for="art_sector" data-i="art_sectorL"></label>
+ <select id="art_sector" data-k="art_sector"></select>
+ <label for="art_link" data-i="art_linkL"></label>
+ <input id="art_link" data-k="art_link" inputmode="url" autocomplete="off">
+ <label for="art_number" data-i="art_numberL"></label>
+ <textarea id="art_number" data-k="art_number" data-ph="art_numberPh"></textarea>
+ <h3 data-i="s1chkH"></h3>
+ <div class="chk">
+  <label><input type="checkbox" data-k="art_c1"><span data-i="art_c1"></span></label>
+  <label><input type="checkbox" data-k="art_c2"><span data-i="art_c2"></span></label>
+  <label><input type="checkbox" data-k="art_c3"><span data-i="art_c3"></span></label>
+  <label><input type="checkbox" data-k="art_c4"><span data-i="art_c4"></span></label>
+ </div>
+ <button id="b_s1" data-i="checkB"></button>
+ <div class="fb" id="f_s1"></div>
+</section>
+
+<!-- 2 -->
+<section class="card" id="s2">
+ <span class="tag" data-i="s2tag"></span>
+ <h2 data-i="s2h"></h2>
+ <div data-i="s2t"></div>
+ <h3 data-i="exOriginH"></h3>
+ <p class="note" data-i="exOriginNote"></p>
+ <div id="ex_origin"></div>
+ <button data-check="origin" data-i="checkB"></button>
+ <div class="score" id="sc_origin"></div>
+ <h3 data-i="s2ownH"></h3>
+ <label for="or_body" data-i="or_bodyL"></label>
+ <input id="or_body" data-k="or_body" data-ph="or_bodyPh">
+ <label for="or_table" data-i="or_tableL"></label>
+ <input id="or_table" data-k="or_table" data-ph="or_tablePh">
+ <div class="grid2">
+  <div><label for="or_years" data-i="or_yearsL"></label><input id="or_years" data-k="or_years" data-ph="yearsPh"></div>
+  <div><label for="or_level" data-i="or_levelL"></label><select id="or_level" data-k="or_level" data-opts="levels"></select></div>
+ </div>
+ <label for="or_type" data-i="or_typeL"></label>
+ <select id="or_type" data-k="or_type" data-opts="srcTypes"></select>
+ <label for="or_primary" data-i="or_primaryL"></label>
+ <select id="or_primary" data-k="or_primary" data-opts="primary"></select>
+ <button id="b_s2" data-i="checkB"></button>
+ <div class="fb" id="f_s2"></div>
+</section>
+
+<!-- 3 -->
+<section class="card" id="s3">
+ <span class="tag" data-i="s3tag"></span>
+ <h2 data-i="s3h"></h2>
+ <div data-i="s3t"></div>
+ <h3 data-i="exSortH"></h3>
+ <p class="note" data-i="exSortNote"></p>
+ <div id="ex_sort"></div>
+ <button data-check="sort" data-i="checkB"></button>
+ <div class="score" id="sc_sort"></div>
+ <h3 data-i="bH"></h3>
+ <p class="note" data-i="bNote"></p>
+ <label for="b_where" data-i="b_whereL"></label>
+ <input id="b_where" data-k="b_where" data-ph="b_wherePh">
+ <div class="grid2">
+  <div><label for="b_level" data-i="b_levelL"></label><select id="b_level" data-k="b_level" data-opts="levels"></select></div>
+  <div><label for="b_kind" data-i="b_kindL"></label><select id="b_kind" data-k="b_kind" data-opts="kinds"></select></div>
+ </div>
+ <label for="b_what" data-i="b_whatL"></label>
+ <input id="b_what" data-k="b_what" data-ph="b_whatPh">
+ <label for="b_unit" data-i="b_unitL"></label>
+ <input id="b_unit" data-k="b_unit" data-ph="b_unitPh">
+ <label for="b_change" data-i="b_changeL"></label>
+ <input id="b_change" data-k="b_change" data-ph="b_changePh">
+ <div class="grid2">
+  <div><label for="b_from" data-i="b_fromL"></label><input id="b_from" data-k="b_from" inputmode="numeric" maxlength="4" placeholder="2017"></div>
+  <div><label for="b_to" data-i="b_toL"></label><input id="b_to" data-k="b_to" inputmode="numeric" maxlength="4" placeholder="2019"></div>
+ </div>
+ <label for="b_cmp" data-i="b_cmpL"></label>
+ <input id="b_cmp" data-k="b_cmp" data-ph="b_cmpPh">
+ <label for="b_why" data-i="b_whyL"></label>
+ <input id="b_why" data-k="b_why" data-ph="b_whyPh">
+ <div class="preview" id="b_preview"></div>
+ <label for="hyp_final" data-i="hyp_finalL"></label>
+ <textarea id="hyp_final" data-k="hyp_final" data-ph="hyp_finalPh"></textarea>
+ <div class="row"><button id="b_fill" class="ghost" data-i="b_fillB"></button><button id="b_s3" data-i="checkB"></button></div>
+ <div class="fb" id="f_s3"></div>
+</section>
+
+<!-- 4 -->
+<section class="card" id="s4">
+ <span class="tag" data-i="s4tag"></span>
+ <h2 data-i="s4h"></h2>
+ <div data-i="s4t"></div>
+ <h3 data-i="exNullH"></h3>
+ <p class="note" data-i="exNullNote"></p>
+ <div id="ex_null"></div>
+ <button data-check="null" data-i="checkB"></button>
+ <div class="score" id="sc_null"></div>
+ <h3 data-i="s4ownH"></h3>
+ <p class="note" id="s4hyp"></p>
+ <label for="null_line" data-i="null_lineL"></label>
+ <textarea id="null_line" data-k="null_line" data-ph="null_linePh"></textarea>
+ <label for="null_thr" data-i="null_thrL"></label>
+ <input id="null_thr" data-k="null_thr" data-ph="null_thrPh">
+ <label for="null_h0" data-i="null_h0L"></label>
+ <textarea id="null_h0" data-k="null_h0" data-ph="null_h0Ph"></textarea>
+ <button id="b_s4" data-i="checkB"></button>
+ <div class="fb" id="f_s4"></div>
+</section>
+
+<!-- 5 -->
+<section class="card" id="s5">
+ <span class="tag" data-i="s5tag"></span>
+ <h2 data-i="s5h"></h2>
+ <div data-i="s5t"></div>
+ <div class="tw" id="t_table"></div>
+ <p class="note" data-i="t_src"></p>
+ <div id="ex_num"></div>
+ <button id="b_num" data-i="checkB"></button>
+ <div class="score" id="sc_num"></div>
+ <h3 data-i="decH"></h3>
+ <div id="ex_dec"></div>
+ <button data-check="dec" data-i="checkB"></button>
+ <div class="score" id="sc_dec"></div>
+ <h3 data-i="s5ownH"></h3>
+ <label for="own_numbers" data-i="own_numbersL"></label>
+ <textarea id="own_numbers" data-k="own_numbers" data-ph="own_numbersPh"></textarea>
+ <label for="own_verdict" data-i="own_verdictL"></label>
+ <select id="own_verdict" data-k="own_verdict" data-opts="verdicts"></select>
+ <label for="own_verdict_num" data-i="own_verdict_numL"></label>
+ <input id="own_verdict_num" data-k="own_verdict_num" data-ph="own_verdict_numPh">
+</section>
+
+<!-- 6 -->
+<section class="card" id="s6">
+ <span class="tag" data-i="s6tag"></span>
+ <h2 data-i="s6h"></h2>
+ <div data-i="s6t"></div>
+ <div id="ex_extra"></div>
+ <button data-check="extra" data-i="checkB"></button>
+ <div class="score" id="sc_extra"></div>
+ <h3 data-i="s6ownH"></h3>
+ <label for="ex_alt" data-i="ex_altL"></label>
+ <textarea id="ex_alt" data-k="ex_alt" data-ph="ex_altPh"></textarea>
+ <label for="ex_data2" data-i="ex_data2L"></label>
+ <textarea id="ex_data2" data-k="ex_data2" data-ph="ex_data2Ph"></textarea>
+</section>
+
+<!-- 7 -->
+<section class="card" id="s7">
+ <span class="tag" data-i="s7tag"></span>
+ <h2 data-i="s7h"></h2>
+ <div data-i="s7t"></div>
+ <div id="story"></div>
+ <h3 data-i="s7ownH"></h3>
+ <p class="note" data-i="s7ownNote"></p>
+ <label for="st_lead" data-i="st_leadL"></label>
+ <textarea id="st_lead" data-k="st_lead"></textarea>
+ <label for="st_nut" data-i="st_nutL"></label>
+ <textarea id="st_nut" data-k="st_nut"></textarea>
+ <label for="st_src" data-i="st_srcL"></label>
+ <textarea id="st_src" data-k="st_src"></textarea>
+ <button id="b_s7" data-i="checkB"></button>
+ <div class="fb" id="f_s7"></div>
+</section>
+
+<!-- worksheet -->
+<section class="card" id="ws">
+ <span class="tag" data-i="wsTag"></span>
+ <h2 data-i="wsH"></h2>
+ <p data-i="wsT"></p>
+ <label for="ws_name" data-i="ws_nameL"></label>
+ <input id="ws_name" data-k="ws_name" autocomplete="off">
+ <pre id="ws_out"></pre>
+ <div class="row">
+  <button id="ws_copy" data-i="wsCopy"></button>
+  <button id="ws_dl" data-i="wsDl"></button>
+  <button id="ws_clear" class="ghost" data-i="wsClear"></button>
+ </div>
+ <div class="fb" id="f_ws"></div>
+</section>
+<p class="note" data-i="foot"></p>
+</main>
+<script>
+/* ===== Интерфейс мәтіні: қазақша. Кілттер shell.html (data-i, data-ph) мен app.js (t("...")) ішінде. ===== */
+const TX = {};
+TX.kk = {
+title: "Гипотеза тренажері · JUR401",
+h1: "Гипотеза тренажері",
+sub: "JUR401 Дата журналистика және ЖИ · мақаладан тексерілген сөйлемге дейін жеті қадам",
+intro: "Тренажер 3-аптадағы гипотеза мен 6-аптадағы нөлдік гипотезаны бір жолға жинайды. Өз жобаңыздың тақырыбы бойынша жеті қадамнан өтесіз: мақала, санның төркіні, гипотеза, жалған болу шарты, тексеру, балама түсіндірме және оқырманға арналған үш сөйлем. Әр қадамда «Тексеру» батырмасы бар: бірінші қатеден кейін қысқа кеңес, екінші қатеден кейін толық түсіндірме шығады.",
+privacy: "Жазғандарыңыз ешқайда жіберілмейді, тек осы браузерде сақталады. Беттің соңындағы жұмыс парағын көшіріп не файл ретінде жүктеп алыңыз.",
+nav: ["1 Мақала", "2 Төркін", "3 Гипотеза", "4 Жалғандық", "5 Тексеру", "6 Балама", "7 Стори", "Жұмыс парағы"],
+
+more: "Толығырақ:",
+choose: "Таңдаңыз",
+tryAgain: "Дұрыс емес. Қайта көріңіз.",
+score: (a, b) => "Нәтиже: " + a + " / " + b,
+needNum: "Сан жазыңыз (үтір де, нүкте де жарайды).",
+fixThese: "Мына жерлерді түзетіңіз:",
+checkB: "Тексеру",
+s1ok: "Мақала жарайды. Енді оның санының төркінін іздейміз.",
+s2ok: "Төркін жасыл: датаны жинаған органның өз кестесі. Гипотезаны осы датаға сүйеп жазасыз.",
+s2okYellow: "Төркін сары: кесте PDF есептің ішінде. Жұмысқа жарайды, бірақ сандарды Excel-ге қолмен көшіргенде әр ұяшықты екі рет тексеріңіз.",
+s2red: "Төркін қызыл. Қызыл дереккөзге тақырып құруға болмайды:",
+s3ok: "Гипотезаның төрт бөлігі мен салыстыруы бар, датаңызға сыяды. 4-қадамға өтіңіз.",
+s3warn: "Гипотезаны қабылдауға болады, бірақ мына жерлерді ойланыңыз:",
+s4ok: "Жалған болу шарты нақты, шегі бар, Н0 жазылған. Енді тексеруге көшеміз.",
+s7ok: "Үш бөлік те орнында: саны бар лид, салыстыруы мен күмәні бар нат-граф, толық дереккөз жолы.",
+
+/* 1 */
+s1tag: "1-қадам",
+s1h: "Санға сүйенген мақала",
+s1t: "<p>Өз жобаңыздың секторынан санға сүйенген бір жаңалық мақаласын табыңыз. Қалған қадамдарда осы мақаладағы санды зерттейсіз: ол қайдан шықты, одан қандай гипотеза туады, ол шын ба.</p>",
+art_sectorL: "Сектор",
+art_linkL: "Мақаланың сілтемесі",
+art_numberL: "Мақала қай санға сүйенеді? Бір сөйлеммен жазыңыз",
+art_numberPh: "Мысалы: Маңғыстауда 2019 жылы 3 051 адам қайтыс болды, бұл 2017 жылғыдан 11,6 пайыз көп.",
+s1chkH: "Мақаланы тексеру",
+art_c1: "Мақалада нақты сан бар",
+art_c2: "Санның дереккөзі аталған (орган, кесте не есеп)",
+art_c3: "Мәселе қоғамға маңызды: оқырманның өміріне қатысы бар",
+art_c4: "Сілтеме ашылады, мақаланы өзім оқыдым (ЖИ ұсынған болса да)",
+
+/* 2 */
+s2tag: "2-қадам",
+s2h: "Санның төркіні",
+s2t: "<p>Мақаладағы санды мақаланың өзі жасамаған. Төркін: санды алғаш жинаған органның кестесі. Мақала, пресс-релиз, шенеуніктің сөзі, біреудің инфографикасы оған тек сілтейді. Сіз төркінге жетіп, санды сол жерден өзіңіз табасыз.</p><p>Түсі: <b>жасыл</b> (органның өз кестесі не датасеті), <b>сары</b> (ресми есеп, кестесі PDF ішінде), <b>қызыл</b> (пресс-релиз, мақала, адамның сөзі, біреудің дайын пайызы). Қызыл дереккөзге тақырып құрылмайды.</p>",
+exOriginH: "Жаттығу: төркін қайсы?",
+exOriginNote: "Әр мысалда санның шын төркінін таңдаңыз.",
+s2ownH: "Сіздің мақалаңыздағы санның төркіні",
+or_bodyL: "Датаны жинаған орган",
+or_bodyPh: "Мысалы: Ұлттық статистика бюросы",
+or_tableL: "Кестенің не көрсеткіштің атауы",
+or_tablePh: "Мысалы: Қайтыс болғандар саны, облыстар бөлінісінде",
+or_yearsL: "Қай жылдарды қамтиды",
+yearsPh: "Мысалы: 2000–2024",
+or_levelL: "Бөлінісі",
+or_typeL: "Дереккөздің түрі",
+or_primaryL: "Бұл датаны жинаған органның өз кестесі ме?",
+
+/* 3 */
+s3tag: "3-қадам",
+s3h: "Гипотеза",
+s3t: "<p>Гипотеза: жалған болып шығуы мүмкін, тексерілетін тұжырым. Ол сұрақ емес, тақырып емес, жоспар емес.</p><p>Төрт бөлігі бар: <b>қай жерде · қай кезеңде · қандай көрсеткіш · не болды</b>. Бесіншісі: <b>немен салыстырылады</b>. Көлемі әртүрлі аумақтарды салыстырсаңыз, абсолют санды емес, адам басына шағылған көрсеткішті алыңыз.</p>",
+exSortH: "Жаттығу: бұл не?",
+exSortNote: "Әр сөйлемді төрт топтың біріне жатқызыңыз.",
+bH: "Гипотеза құрастырғыш",
+bNote: "Өрістерді толтырыңыз, төменде сөйлемнің жобасы жиналады. Оны көшіріп, табиғи сөйлемге айналдырыңыз.",
+b_whereL: "Қай жерде",
+b_wherePh: "Маңғыстау облысында",
+b_levelL: "Аумақтың деңгейі",
+b_kindL: "Көрсеткіштің түрі",
+b_whatL: "Қандай көрсеткіш",
+b_whatPh: "мың адамға шаққандағы өлім",
+b_unitL: "Бірлігі",
+b_unitPh: "1000 адамға шаққанда",
+b_changeL: "Не болды",
+b_changePh: "жылдамырақ өсті",
+b_fromL: "Бастапқы жыл",
+b_toL: "Соңғы жыл",
+b_cmpL: "Немен салыстырғанда",
+b_cmpPh: "ел бойынша көрсеткіштен",
+b_whyL: "Себебі (міндетті емес)",
+b_whyPh: "Себебі туралы болжамыңыз болса, осында жазыңыз. Ол гипотезаға кірмейді, 6-қадамда тексеріледі.",
+hyp_finalL: "Гипотезаның соңғы нұсқасы",
+hyp_finalPh: "Құрастырылған жобаны көшіріп, өзіңіз түзетіңіз",
+b_fillB: "Құрастырылғанды көшіру",
+gap_b_where: "қай жерде",
+gap_b_what: "көрсеткіш",
+gap_b_change: "не болды",
+gap_b_cmp: "немен салыстырғанда",
+gap_period: "кезең",
+previewTpl: (per, where, what, change, cmp) => per + " жылдары " + where + " " + what + " " + cmp + " " + change + ".",
+previewWhy: x => "(Себебі туралы болжам: " + x + ". Гипотезаға кірмейді.)",
+fillQ: "Гипотеза өрісінде мәтін бар. Құрастырылған жобамен ауыстырылсын ба?",
+
+/* 4 */
+s4tag: "4-қадам",
+s4h: "Жалған болу шарты және нөлдік гипотеза",
+s4t: "<p>Міндетті жол: <b>«Егер дата ___ көрсетсе, гипотезам жалған.»</b> Жолда нақты шек болуы керек: гипотезаны расталды деп санайтын ең кіші өзгеріс. Шек болмаса, кез келген болмашы айырма «дәлел» болып шыға келеді.</p><p><b>Нөлдік гипотеза (Н0)</b>: сізді құлата алатын ең қарапайым түсіндірме. Көбіне ол мынадай болады: «шын өзгеріс жоқ, тек халық көбейді», «тек тіркеу тәртібі өзгерді», «тек баға өсті».</p>",
+exNullH: "Жаттығу: қай жол гипотезаны шынымен тексереді?",
+exNullNote: "Әр гипотезаға лайық «гипотезам жалған» жолын таңдаңыз.",
+s4ownH: "Сіздің гипотезаңызға",
+s4yourHyp: "Гипотезаңыз:",
+s4noHyp: "Гипотеза әлі жазылмаған: алдымен 3-қадамды толтырыңыз.",
+null_lineL: "Егер дата ___ көрсетсе, гипотезам жалған",
+null_linePh: "Мысалы: Егер Маңғыстаудағы өсім ел бойынша өсімнен 1 пайыздық тармаққа жетпесе, гипотезам жалған.",
+null_thrL: "Шек (сан)",
+null_thrPh: "Мысалы: 1 пайыздық тармақ",
+null_h0L: "Нөлдік гипотеза (Н0)",
+null_h0Ph: "Мысалы: Мың адамға шаққандағы өлім өзгерген жоқ, тек облыс халқы көбейді.",
+
+/* 5 */
+s5tag: "5-қадам",
+s5h: "Тексеру: сан не дейді?",
+s5t: "<p>Мақалада «Маңғыстауда өлім 11,6 пайызға өсті» деп жазылды делік. Гипотеза: 2017–2019 жылдары Маңғыстауда мың адамға шаққандағы өлім ел бойынша көрсеткіштен жылдамырақ өсті. Н0: тек халық көбейді. Төмендегі кестемен ЖЕБЕ-ні және мың адамға шаққандағы көрсеткішті есептеңіз. Калькулятор қолдануға болады.</p><p><b>ЖЕБЕ</b> = (Жаңа − Ескі) ÷ Ескі × 100 · <b>Мың адамға</b> = Қайтыс болғандар ÷ Халық × 1000</p>",
+tYear: "Жыл",
+tMD: "Маңғыстау, қайтыс болғандар",
+tMP: "Маңғыстау, халық (1 қаңтар)",
+tKD: "Қазақстан, қайтыс болғандар",
+tKP: "Қазақстан, халық (1 қаңтар)",
+t_src: "Дереккөз: Ұлттық статистика бюросы, «Қайтыс болғандар саны» және «Халық саны, жыл басына» кестелері.",
+decH: "Шешім: расталды, жоққа шықты, әлде дата жетпеді?",
+s5ownH: "Сіздің гипотезаңыз",
+own_numbersL: "Қандай сандар шықты? (кестесі мен ұяшығын қоса жазыңыз)",
+own_numbersPh: "Мысалы: Маңғыстау 4,25 → 4,49 (+5,8%), ел 7,21 → 7,21 (0,0%)",
+own_verdictL: "Нәтиже",
+own_verdict_numL: "Шешімді анықтаған сан",
+own_verdict_numPh: "Мысалы: айырма 5,8 пайыздық тармақ, шек 1",
+
+/* 6 */
+s6tag: "6-қадам",
+s6h: "Балама түсіндірме және екінші дата",
+s6t: "<p>Гипотеза расталса да, жұмыс бітпейді. Сол санды басқаша түсіндіретін ең ықтимал себепті табыңыз да, оны тексеретін екінші датаны атаңыз. Жиі кездесетін баламалар: халық саны, жас құрамы, инфляция, шекараның өзгеруі, тіркеу тәртібінің өзгеруі.</p>",
+s6ownH: "Сіздің гипотезаңызға",
+ex_altL: "Ең ықтимал балама түсіндірме",
+ex_altPh: "Мысалы: облыс халқы жас, сондықтан өлім деңгейі төмен.",
+ex_data2L: "Оны тексеретін екінші дата (орган, кесте)",
+ex_data2Ph: "Мысалы: Ұлттық статистика бюросы, халық саны жас топтары бойынша, облыстар бөлінісінде",
+
+/* 7 */
+s7tag: "7-қадам",
+s7h: "Оқырманға үш бөлік",
+s7t: "<p>Тексерілген санды оқырманға үш бөлікпен жеткізесіз: <b>лид</b> (негізгі табылым, бір сан), <b>нат-граф</b> (сан, салыстыру, күмән, келесі тексеру) және <b>дереккөз жолы</b> (орган, кесте, жылдар). Төменде 5-қадамның сандарымен жазылған үлгі тұр.</p>",
+s7ownH: "Сіздің үш бөлігіңіз",
+s7ownNote: "Себепті дата көрсетпесе, оны факт ретінде жазбаңыз: «болуы мүмкін» деп жазып, қалай тексерілетінін айтыңыз.",
+st_leadL: "Лид",
+st_nutL: "Нат-граф",
+st_srcL: "Дереккөз жолы",
+
+/* жұмыс парағы */
+wsTag: "Соңы",
+wsH: "Жұмыс парағы",
+wsT: "Барлық қадамдағы жауаптарыңыз осында жиналады. Көшіріп алыңыз не .txt файл ретінде жүктеп алыңыз.",
+ws_nameL: "Аты-жөніңіз (міндетті емес)",
+wsCopy: "Көшіру",
+wsDl: "Жүктеп алу (.txt)",
+wsClear: "Бәрін тазалау",
+wsEmpty: "(бос)",
+wsDate: "Күні",
+wsChecklist: "Тексеру",
+wsBuilder: "Құрастырғыш",
+wsWhyFlag: "себеп, гипотезаға кірмейді",
+wsScores: "Жаттығулар нәтижесі",
+wsEx_origin: "Төркін (2-қадам)",
+wsEx_sort: "Сұрыптау (3-қадам)",
+wsEx_null: "Жалғандық жолы (4-қадам)",
+wsEx_num: "Есептеу (5-қадам)",
+wsEx_dec: "Шешім (5-қадам)",
+wsEx_extra: "Екінші дата (6-қадам)",
+wsNotDone: "орындалмады",
+wsFooter: "JUR401 · Гипотеза тренажері · SDU University",
+wsCopied: "Көшірілді.",
+wsCopyFail: "Көшіру шықпады. Мәтінді белгілеп, қолмен көшіріңіз.",
+wsFile: "Гипотеза_жұмыс_парағы",
+wsClearQ: "Барлық жауабыңыз өшіріледі. Жалғастырасыз ба?",
+foot: "JUR401 «Дата журналистика және ЖИ» · SDU University · Асхат Еркімбай · 2026 күз"
+};
+
+</script>
+<script>
+/* ===== Interface text: English. Missing keys fall back to TX.kk (see t() in app.js). ===== */
+TX.en = {
+title: "Hypothesis trainer · JUR401",
+h1: "Hypothesis trainer",
+sub: "JUR401 Data Journalism and AI · seven steps from a news story to a tested sentence",
+intro: "This trainer puts the week 3 hypothesis and the week 6 null hypothesis on one path. Using your own project topic, you go through seven steps: a news story, the origin of its number, a hypothesis, the condition that would make it false, the test, an alternative explanation, and three pieces for the reader. Every step has a \"Check\" button: after the first mistake you get a short hint, after the second a full explanation.",
+privacy: "Nothing you write is sent anywhere; it is stored only in this browser. At the end, copy the worksheet or download it as a file.",
+nav: ["1 Story", "2 Origin", "3 Hypothesis", "4 Falsify", "5 Test", "6 Alternative", "7 Write", "Worksheet"],
+
+more: "More:",
+choose: "Choose",
+tryAgain: "Not quite. Try again.",
+score: (a, b) => "Score: " + a + " / " + b,
+needNum: "Enter a number (comma or point both work).",
+fixThese: "Fix these:",
+checkB: "Check",
+s1ok: "The story works. Now let's trace where its number comes from.",
+s2ok: "Green origin: the collecting body's own table. Build your hypothesis on this data.",
+s2okYellow: "Yellow origin: the table sits inside a PDF report. Usable, but check every cell twice when you copy numbers into Excel by hand.",
+s2red: "Red origin. You can't build a topic on a red source:",
+s3ok: "Your hypothesis has all four parts and a comparison, and it fits your data. Go to step 4.",
+s3warn: "The hypothesis can stand, but think about these:",
+s4ok: "The falsification line is specific, it has a threshold, and your H0 is written. On to the test.",
+s7ok: "All three pieces are there: a lead with a number, a nut graf with a comparison and a doubt, and a full source line.",
+
+/* 1 */
+s1tag: "Step 1",
+s1h: "A story built on a number",
+s1t: "<p>Find one news story from your project's sector that rests on a number. The rest of the steps follow that number: where it came from, what hypothesis it suggests, and whether it holds.</p>",
+art_sectorL: "Sector",
+art_linkL: "Link to the story",
+art_numberL: "Which number is the story built on? One sentence",
+art_numberPh: "e.g. 3,051 people died in Mangystau in 2019, 11.6% more than in 2017.",
+s1chkH: "Check the story",
+art_c1: "The story contains a specific number",
+art_c2: "The number's source is named (a body, table or report)",
+art_c3: "The issue matters to the public: it touches readers' lives",
+art_c4: "The link opens and I read the story myself (even if an AI suggested it)",
+
+/* 2 */
+s2tag: "Step 2",
+s2h: "Where the number comes from",
+s2t: "<p>The number in a story isn't the story's own. Its origin is the table of the body that first collected it. Articles, press releases, officials' statements and other people's infographics only point to it. You go back to the origin and find the number there yourself.</p><p>Colour: <b>green</b> (the body's own table or dataset), <b>yellow</b> (an official report with the table inside a PDF), <b>red</b> (press release, article, someone's statement, someone else's percentage). You can't build a topic on red.</p>",
+exOriginH: "Exercise: which is the origin?",
+exOriginNote: "For each example, pick the number's real origin.",
+s2ownH: "The origin of the number in your story",
+or_bodyL: "Body that collected the data",
+or_bodyPh: "e.g. Bureau of National Statistics",
+or_tableL: "Name of the table or indicator",
+or_tablePh: "e.g. Number of deaths, by region",
+or_yearsL: "Years covered",
+yearsPh: "e.g. 2000–2024",
+or_levelL: "Breakdown",
+or_typeL: "Type of source",
+or_primaryL: "Is this the collecting body's own table?",
+
+/* 3 */
+s3tag: "Step 3",
+s3h: "Hypothesis",
+s3t: "<p>A hypothesis is a testable claim that could turn out to be false. It isn't a question, a topic or a plan.</p><p>It has five parts: <b>where · when · which indicator · what happened · compared with what</b>. If you compare areas of different size, use a rate per head, not an absolute count.</p>",
+exSortH: "Exercise: what is it?",
+exSortNote: "Put each sentence into one of the four groups.",
+bH: "Hypothesis builder",
+bNote: "Fill in the fields and a draft sentence builds up below. Copy it and turn it into a natural sentence.",
+b_whereL: "Where",
+b_wherePh: "Mangystau region",
+b_levelL: "Level of the area",
+b_kindL: "Kind of indicator",
+b_whatL: "Which indicator",
+b_whatPh: "deaths per 1,000 people",
+b_unitL: "Unit",
+b_unitPh: "per 1,000 people",
+b_changeL: "What happened",
+b_changePh: "rose faster",
+b_fromL: "First year",
+b_toL: "Last year",
+b_cmpL: "Compared with",
+b_cmpPh: "than the national rate",
+b_whyL: "Cause (optional)",
+b_whyPh: "If you have a cause in mind, note it here. It stays out of the hypothesis and gets tested in step 6.",
+hyp_finalL: "Final version of your hypothesis",
+hyp_finalPh: "Copy the draft and polish it yourself",
+b_fillB: "Copy the draft",
+gap_b_where: "where",
+gap_b_what: "indicator",
+gap_b_change: "what happened",
+gap_b_cmp: "compared with",
+gap_period: "period",
+previewTpl: (per, where, what, change, cmp) => "Over " + per + ", " + what + " in " + where + " " + change + " " + cmp + ".",
+previewWhy: x => "(Suspected cause: " + x + ". Not part of the hypothesis.)",
+fillQ: "The hypothesis box already has text. Replace it with the draft?",
+
+/* 4 */
+s4tag: "Step 4",
+s4h: "The falsification line and the null hypothesis",
+s4t: "<p>The required line: <b>\"If the data shows ___, my hypothesis is false.\"</b> It needs a specific threshold: the smallest change you would accept as support. Without one, any tiny gap becomes \"proof\".</p><p><b>The null hypothesis (H0)</b> is the simplest explanation that could kill yours. It usually sounds like: \"nothing really changed, the population just grew\", \"only the way cases are registered changed\", \"prices just went up\".</p>",
+exNullH: "Exercise: which line really tests the hypothesis?",
+exNullNote: "For each hypothesis, pick the \"my hypothesis is false\" line that fits it.",
+s4ownH: "For your hypothesis",
+s4yourHyp: "Your hypothesis:",
+s4noHyp: "No hypothesis yet: fill in step 3 first.",
+null_lineL: "If the data shows ___, my hypothesis is false",
+null_linePh: "e.g. If Mangystau's rise beats the national rise by less than 1 percentage point, my hypothesis is false.",
+null_thrL: "Threshold (a number)",
+null_thrPh: "e.g. 1 percentage point",
+null_h0L: "Null hypothesis (H0)",
+null_h0Ph: "e.g. The death rate per 1,000 didn't change; the region's population just grew.",
+
+/* 5 */
+s5tag: "Step 5",
+s5h: "The test: what do the numbers say?",
+s5t: "<p>Say a story reports \"deaths in Mangystau up 11.6%\". Hypothesis: between 2017 and 2019, deaths per 1,000 people rose faster in Mangystau than nationally. H0: the population just grew. Use the table below to work out the percentage change (DART) and the rate per 1,000. A calculator is fine.</p><p><b>% change</b> = (New − Old) ÷ Old × 100 · <b>Per 1,000</b> = Deaths ÷ Population × 1,000</p>",
+tYear: "Year",
+tMD: "Mangystau, deaths",
+tMP: "Mangystau, population (1 Jan)",
+tKD: "Kazakhstan, deaths",
+tKP: "Kazakhstan, population (1 Jan)",
+t_src: "Source: Bureau of National Statistics, tables \"Number of deaths\" and \"Population, start of year\".",
+decH: "Verdict: supported, not supported, or not enough data?",
+s5ownH: "Your hypothesis",
+own_numbersL: "What numbers did you get? (with table and cell)",
+own_numbersPh: "e.g. Mangystau 4.25 → 4.49 (+5.8%), national 7.21 → 7.21 (0.0%)",
+own_verdictL: "Result",
+own_verdict_numL: "The number that decided it",
+own_verdict_numPh: "e.g. gap of 5.8 percentage points, threshold 1",
+
+/* 6 */
+s6tag: "Step 6",
+s6h: "Alternative explanation and a second dataset",
+s6t: "<p>Even if your hypothesis holds, you're not done. Find the most likely other explanation for the same number and name the second dataset that would test it. Common alternatives: population size, age structure, inflation, boundary changes, changes in how cases are registered.</p>",
+s6ownH: "For your hypothesis",
+ex_altL: "Most likely alternative explanation",
+ex_altPh: "e.g. The region's population is young, so its death rate is low.",
+ex_data2L: "Second dataset that tests it (body, table)",
+ex_data2Ph: "e.g. Bureau of National Statistics, population by age group, by region",
+
+/* 7 */
+s7tag: "Step 7",
+s7h: "Three pieces for the reader",
+s7t: "<p>You deliver the tested number in three pieces: the <b>lead</b> (the main finding, one number), the <b>nut graf</b> (number, comparison, doubt, next check) and the <b>source line</b> (body, table, years). Below is a model written with the step 5 numbers.</p>",
+s7ownH: "Your three pieces",
+s7ownNote: "If the data doesn't show a cause, don't state it as fact: write \"may\" and say how it could be checked.",
+st_leadL: "Lead",
+st_nutL: "Nut graf",
+st_srcL: "Source line",
+
+/* worksheet */
+wsTag: "End",
+wsH: "Worksheet",
+wsT: "Your answers from every step are collected here. Copy them or download a .txt file.",
+ws_nameL: "Your name (optional)",
+wsCopy: "Copy",
+wsDl: "Download (.txt)",
+wsClear: "Clear everything",
+wsEmpty: "(empty)",
+wsDate: "Date",
+wsChecklist: "Checklist",
+wsBuilder: "Builder",
+wsWhyFlag: "cause, not part of the hypothesis",
+wsScores: "Exercise scores",
+wsEx_origin: "Origin (step 2)",
+wsEx_sort: "Sorting (step 3)",
+wsEx_null: "Falsification line (step 4)",
+wsEx_num: "Calculation (step 5)",
+wsEx_dec: "Verdict (step 5)",
+wsEx_extra: "Second dataset (step 6)",
+wsNotDone: "not done",
+wsFooter: "JUR401 · Hypothesis trainer · SDU University",
+wsCopied: "Copied.",
+wsCopyFail: "Copy failed. Select the text and copy it by hand.",
+wsFile: "Hypothesis_worksheet",
+wsClearQ: "All your answers will be deleted. Continue?",
+foot: "JUR401 Data Journalism and AI · SDU University · Askhat Yerkimbay · Fall 2026"
+};
+
+</script>
+<script>
+/* ===== Жаттығулар, дата, үлгі стори. Мәтінді осы жерде өзгертуге болады. =====
+   Әр жаттығуда: q (сұрақ), opts (нұсқа; code = қате болғанда err.js-тен шығатын кеңес), ans (дұрыс жауап),
+   why (дұрыс болғанда және екінші қатеден кейін көрсетілетін түсіндірме). */
+
+const OPTS = {
+  sectors: [
+    {id:"health", t:{kk:"Денсаулық", en:"Health"}},
+    {id:"fin", t:{kk:"Қаржы", en:"Finance"}},
+    {id:"env", t:{kk:"Қоршаған орта", en:"Environment"}},
+    {id:"sec", t:{kk:"Қауіпсіздік", en:"Security"}},
+    {id:"hr", t:{kk:"Адам құқығы", en:"Human rights"}},
+    {id:"edu", t:{kk:"Білім", en:"Education"}}
+  ],
+  levels: [
+    {id:"country", t:{kk:"Бүкіл ел", en:"Whole country"}},
+    {id:"oblast", t:{kk:"Облыс", en:"Region (oblast)"}},
+    {id:"city", t:{kk:"Республикалық маңызы бар қала (Астана, Алматы, Шымкент)", en:"City of national status (Astana, Almaty, Shymkent)"}},
+    {id:"district", t:{kk:"Аудан немесе облыстағы қала", en:"District or town within a region"}},
+    {id:"inst", t:{kk:"Мекеме (мектеп, аурухана, сот)", en:"Institution (school, hospital, court)"}}
+  ],
+  srcTypes: [
+    {id:"table", t:{kk:"Кесте немесе датасет (xlsx, csv, дерекқор)", en:"Table or dataset (xlsx, csv, database)"}},
+    {id:"report", t:{kk:"Ресми есеп, кестесі PDF ішінде", en:"Official report, table inside a PDF"}},
+    {id:"press", t:{kk:"Пресс-релиз", en:"Press release"}},
+    {id:"article", t:{kk:"Жаңалық мақаласы", en:"News article"}},
+    {id:"person", t:{kk:"Адамның сөзі (шенеунік, сарапшы, саясаткер)", en:"Someone's statement (official, expert, politician)"}},
+    {id:"pct", t:{kk:"Біреудің дайын пайызы, инфографика", en:"Someone else's ready-made percentage or infographic"}}
+  ],
+  primary: [
+    {id:"first", t:{kk:"Иә, датаны жинаған органның өз кестесі", en:"Yes, the table of the body that collected the data"}},
+    {id:"second", t:{kk:"Жоқ, оны басқа біреу қайталап жазған", en:"No, someone else is repeating it"}},
+    {id:"unknown", t:{kk:"Білмеймін", en:"I don't know"}}
+  ],
+  kinds: [
+    {id:"count", t:{kk:"Санау: абсолют сан (адам, оқиға, теңге)", en:"Count: absolute number (people, events, tenge)"}},
+    {id:"rate", t:{kk:"Көрсеткіш: 1000 не 100 мың адамға, үлес, орташа", en:"Rate: per 1,000 or 100,000 people, share, average"}}
+  ],
+  verdicts: [
+    {id:"supp", t:{kk:"Расталды", en:"Supported"}},
+    {id:"rej", t:{kk:"Жоққа шықты", en:"Not supported"}},
+    {id:"nodata", t:{kk:"Дата жетпеді", en:"Not enough data"}},
+    {id:"notyet", t:{kk:"Әлі тексерген жоқпын", en:"Not tested yet"}}
+  ]
+};
+
+/* Студенттің өз мәтінін тексеретін үлгілер (қазақша да, ағылшынша да ұстайды) */
+const RULES = {
+  question: /\?|\s(ма|ме|ба|бе|па|пе)\s*[.!]?\s*$|^\s*(why|how|what|is|are|does|do|did|will|can)\b/i,
+  plan: /салыстыр(амын|амыз|ып көремін|у керек)|қарастыр(амын|амыз)|зертте(ймін|йміз)|талда(ймын|ймыз)|анықта(ймын|ймыз)|тексер(емін|еміз)|\b(we will|i will|i'll|we'll|i want to|we want to)\b/i,
+  compare: /салыстырғанда|қарағанда|\sал\s|орташа|жылдам|баяу|ел бойынша|асып|артта|than|compared|while|whereas|average|faster|slower|national|behind/i,
+  causal: /себебі|себебінен|салдарынан|кесірінен|әсерінен|ықпал|өйткені|арқасында|(ғандықтан|гендіктен|қандықтан|кендіктен)|\b(because|due to|caused|result of|led to|thanks to|impact of)\b/i,
+  vague: /шамадан тыс|нашар|сапасыз|жаман|өте көп|тым көп|қорқынышты|\b(terrible|bad|poor|too much|huge|awful)\b/i,
+  two: /\sәрі\s|сондай-ақ|\sand also\s/i,
+  confirm: /(дұрыс|расталады|дәлелденеді|шын болады)\s*[.!]?\s*$|\b(is|are) (true|correct|right|proven)\.?\s*$|\b(proves|confirms)\b/i,
+  falsePhrase: /жалған|теріске|расталмайды|false|wrong|not supported|rejected/i,
+  negation: /емес|жоқ|өспе|азайма|өзгерме|аз\s|\bnot\b|n't|\bless\b/i,
+  source: /stat\.gov|бюро|министрлі|агенттік|дереккөз|taldau|data\.egov|комитет|қазгидромет|ұлттық банк|bureau|ministry|agency|source|committee|national bank|statistic/i,
+  doubt: /бірақ|алайда|дегенмен|әйтсе де|десе де|\b(but|however|yet|although|though)\b/i,
+  next: /келесі|тексер|анықта|қарау керек|\b(next|check|verify|remains|still need|test)\b/i
+};
+
+/* 5-қадамның датасы. Дереккөз: Ұлттық статистика бюросы. Ұяшықтар _ҮЛГІ_СТОРИ_ТЕКСЕРУГЕ.md ішінде. */
+const DATA = {
+  M: {d:{2016:2799, 2017:2733, 2018:3007, 2019:3051}, p:{2016:627321, 2017:643379, 2018:660874, 2019:678766}},
+  K: {d:{2016:131983, 2017:129173, 2018:129680, 2019:132621}, p:{2016:17668720, 2017:17916623, 2018:18155825, 2019:18394642}}
+};
+
+const EX = {};
+
+/* 2-қадам: үш сөйлем, қайсысы төркін */
+EX.origin = {items: [
+  {id:"o1", sec:"health",
+   q:{kk:"Жергілікті жаңалық сайты: «Маңғыстауда 2019 жылы 3 051 адам қайтыс болды». Дереккөз ретінде облыстық денсаулық сақтау басқармасы аталған. Санның төркіні қайсы?",
+      en:"A local news site: \"3,051 people died in Mangystau in 2019.\" The regional health department is named as the source. Where does the number really come from?"},
+   opts:[
+    {id:"a", code:"secondary", t:{kk:"Жаңалық сайтының өзі", en:"The news site itself"}},
+    {id:"b", code:"press", t:{kk:"Облыстық денсаулық сақтау басқармасының баспасөз хабарламасы", en:"The regional health department's press release"}},
+    {id:"c", t:{kk:"Ұлттық статистика бюросы, «Қайтыс болғандар саны» кестесі, облыстар бөлінісінде, 2000–2024", en:"Bureau of National Statistics, table \"Number of deaths\", by region, 2000–2024"}},
+    {id:"d", code:"person", t:{kk:"Тілшіге сұхбат берген дәрігердің сөзі", en:"A doctor quoted by the reporter"}}],
+   ans:"c",
+   why:{kk:"Қайтыс болғандарды тіркеудің ресми жиынтығы осы кестеде. Басқарма мен сайт оны қайталайды. Төркінге жеткен соң сол кестеден санды өзіңіз тауып, мақаладағымен салыстырасыз: Маңғыстау, 2019, 3 051.",
+        en:"The official count of registered deaths lives in this table. The department and the site repeat it. Once you reach the origin, find the number yourself and compare: Mangystau, 2019, 3,051."}},
+  {id:"o2", sec:"fin",
+   q:{kk:"Телеграм-арна: «Халықтың тұтынушылық несие бойынша қарызы бір жылда 30 пайызға өсті» (мысал, сан шартты). Астында инфографика бар, дереккөз жоқ. Төркінін қайдан іздейсіз?",
+      en:"A Telegram channel: \"Household consumer-loan debt grew 30% in a year\" (example, made-up number). There's an infographic and no source. Where do you look for the origin?"},
+   opts:[
+    {id:"a", code:"pct", t:{kk:"Инфографиканың авторы", en:"Whoever made the infographic"}},
+    {id:"b", code:"secondary", t:{kk:"Сол пайызды қайталаған тағы үш арна", en:"Three more channels repeating the same percentage"}},
+    {id:"c", t:{kk:"Ұлттық Банктің несие статистикасы: жеке тұлғаларға берілген тұтынушылық несие кестесі, айлар мен жылдар бойынша", en:"National Bank lending statistics: the table of consumer loans to individuals, by month and year"}},
+    {id:"d", code:"person", t:{kk:"Арнаға пікір қалдырған экономист", en:"An economist commenting under the post"}}],
+   ans:"c",
+   why:{kk:"Сан бір жерден шыққан, ал оны қайталаған арнаның көптігі оны дәлелдемейді. Несие туралы бастапқы ресми статистика Ұлттық Банкте. Біреудің дайын пайызын сол кестеден ЖЕБЕ-мен өзіңіз қайта есептейсіз.",
+        en:"The number came from one place; more channels repeating it don't make it true. The primary official lending data is the National Bank's. You recalculate someone else's percentage from that table yourself."}},
+  {id:"o3", sec:"env",
+   q:{kk:"Ақпарат агенттігі: «Министр Алматыда ауа сапасы жақсарғанын мәлімдеді». Тексеретін дата қайда?",
+      en:"A news agency: \"The minister said Almaty's air quality has improved.\" Where is the data to check this?"},
+   opts:[
+    {id:"a", code:"authority", t:{kk:"Министрдің сөзі", en:"The minister's statement"}},
+    {id:"b", code:"secondary", t:{kk:"Ақпарат агенттігінің мақаласы", en:"The news agency's article"}},
+    {id:"c", code:"anecdote", t:{kk:"Әлеуметтік желідегі тұрғындардың шағымы", en:"Residents' complaints on social media"}},
+    {id:"d", t:{kk:"Қазгидрометтің қоршаған орта жағдайы туралы ай сайынғы бюллетені: бекеттер, айлар, ластану деңгейі", en:"Kazhydromet's monthly environmental bulletin: monitoring stations, months, pollution levels"}}],
+   ans:"d",
+   why:{kk:"Шенеуніктің сөзі дата емес, ол тексерілетін тұжырым. Ауаны өлшейтін бекеттер Қазгидрометтікі, сондықтан «жақсарды ма» деген сұрақтың жауабы бюллетеньдегі айлар мен жылдарды салыстырғанда шығады.",
+        en:"An official's statement isn't data; it's a claim to check. The stations that measure the air belong to Kazhydromet, so the answer comes from comparing months and years in its bulletin."}}
+]};
+
+/* 3-қадам: сұрыптау */
+EX.sort = {
+  cats: [
+    {id:"topic", t:{kk:"Тақырып немесе жоспар", en:"Topic or plan"}},
+    {id:"question", t:{kk:"Сұрақ", en:"Question"}},
+    {id:"weak", t:{kk:"Әлсіз гипотеза", en:"Weak hypothesis"}},
+    {id:"strong", t:{kk:"Күшті гипотеза", en:"Strong hypothesis"}}
+  ],
+  items: [
+  {id:"h1", sec:"health", ans:"topic",
+   q:{kk:"Емханалар: дәрігер саны, кезек, облыстар бойынша салыстыру.", en:"Clinics: number of doctors, waiting times, comparison by region."},
+   why:{kk:"Бұл айнымалылар тізімі мен жоспар: не болғаны айтылмайды. Тізімнен бір көрсеткішті алып, «не болды» деп тұжырым жазыңыз.", en:"This is a list of variables plus a plan: it doesn't say what happened. Take one indicator from the list and write what happened to it."}},
+  {id:"h2", sec:"fin", ans:"question",
+   q:{kk:"Жастар неге несиеге батып жатыр?", en:"Why are young people drowning in debt?"},
+   why:{kk:"Сұрақ, оның үстіне ішінде дәлелденбеген болжам жасырынып тұр («батып жатыр»). Күтетін жауабыңызды тұжырым етіп жазыңыз: қай жерде, қай жылдары, қандай көрсеткіш.", en:"It's a question, and it hides an unproven assumption (\"drowning\"). Write the answer you expect as a claim: where, which years, which indicator."}},
+  {id:"h3", sec:"health", ans:"strong",
+   q:{kk:"2015–2024 жылдары ауыл аудандарында 10 000 адамға шаққандағы дәрігер саны азайды, ал Алматы мен Астанада өсті.", en:"Between 2015 and 2024, doctors per 10,000 people fell in rural districts while rising in Almaty and Astana."},
+   why:{kk:"Төрт бөлігі түгел: орын (ауыл аудандары), кезең (2015–2024), көрсеткіш (10 000 адамға шаққандағы дәрігер), не болды (азайды). Салыстыру да бар (Алматы мен Астана), ал көрсеткіш адам басына шағылған, сондықтан әртүрлі аумақты әділ салыстыруға болады.", en:"All four parts: place (rural districts), period (2015–2024), indicator (doctors per 10,000), what happened (fell). It has a comparison (Almaty and Astana), and the indicator is per head, so areas of different size compare fairly."}},
+  {id:"h4", sec:"fin", ans:"weak", code:"causal",
+   q:{kk:"Онлайн-казино көбейгендіктен, 2020–2024 жылдары азаматтардың несие бойынша қарызы өсті.", en:"Because online casinos multiplied, people's loan debt grew between 2020 and 2024."},
+   why:{kk:"Кезең бар, бірақ сөйлемнің өзегі себеп. Дата қарыздың өскенін көрсете алады, онлайн-казиноның оған себеп болғанын көрсете алмайды. Себепті алып тастаңыз немесе бөлек белгілеңіз: оған қосымша дата керек (6-қадам).", en:"There's a period, but the core of the sentence is a cause. Data can show that debt grew; it can't show that online casinos caused it. Drop the cause or flag it separately: it needs extra data (step 6)."}},
+  {id:"h5", sec:"env", ans:"strong",
+   q:{kk:"2018–2024 жылдары Алматыда қыстың үш айында ауаның жоғары ластануы тіркелген күн саны жаздың үш айындағыдан кемінде үш есе көп болды.", en:"Between 2018 and 2024, Almaty recorded at least three times as many high-pollution days in the three winter months as in the three summer months."},
+   why:{kk:"Орын, кезең, өлшем (жоғары ластану тіркелген күн саны), не болды (кемінде үш есе көп) және салыстыру (жаз) бар. «Кемінде үш есе» деген шек гипотезаны теріске шығаруға мүмкіндік береді: екі есе болса, ол жалған.", en:"Place, period, measure (days with high pollution recorded), what happened (at least three times as many) and a comparison (summer). The \"at least three times\" threshold makes it falsifiable: if it's twice as many, it's false."}},
+  {id:"h6", sec:"sec", ans:"weak", code:"absrate",
+   q:{kk:"Түркістан облысында Павлодар облысына қарағанда жол апаты көп.", en:"Turkistan region has more road accidents than Pavlodar region."},
+   why:{kk:"Халқы екі еседен көп облыстың апаты да көп болуы заңды. Салыстыру 100 мың тұрғынға шаққанда жүргізілуі керек. Оның үстіне кезең жоқ.", en:"A region with more than twice the population will naturally have more accidents. Compare per 100,000 residents. There's also no period."}},
+  {id:"h7", sec:"hr", ans:"weak", code:"nodataset",
+   q:{kk:"Министрліктің үш пресс-релизі бойынша елде балалар буллингі көбейді.", en:"According to three ministry press releases, bullying of children has increased in the country."},
+   why:{kk:"Пресс-релиз датасет емес, ал үш оқиға тұтас құбылыстың өлшемі бола алмайды. Кезең мен өлшем де жоқ. Тіркелген оқиғалар кестесін іздеңіз (мысалы, Бас прокуратураның құқықтық статистика порталы), пресс-релиз тақырыпқа сигнал ретінде ғана қалады.", en:"A press release isn't a dataset, and three cases can't measure a whole phenomenon. There's no period or measure either. Look for a table of registered cases (for example, the Prosecutor General's legal statistics portal); the press release is only a signal for the topic."}},
+  {id:"h8", sec:"edu", ans:"topic",
+   q:{kk:"Екі облыстың ҰБТ нәтижесін салыстырамыз.", en:"We will compare UNT results in two regions."},
+   why:{kk:"«Салыстырамыз» деген жоспар, тұжырым емес. Жоспарды теріске шығару мүмкін емес. Тұжырым былай аяқталады: «15 балға артта қалды», «айырма өсті».", en:"\"We will compare\" is a plan, not a claim. A plan can't be proven false. A claim ends like this: \"fell 15 points behind\", \"the gap widened\"."}},
+  {id:"h9", sec:"fin", ans:"strong",
+   q:{kk:"2020–2025 жылдары Қызылорда облысында шағын бизнеске берілген несиенің жалпы несиедегі үлесі ел бойынша орташадан баяу өсті.", en:"Between 2020 and 2025, the share of small-business loans in all lending grew more slowly in Kyzylorda region than the national average."},
+   why:{kk:"Орын, кезең, көрсеткіш (үлес, яғни шағылған өлшем), не болды (баяу өсті) және салыстыру (ел бойынша орташа) бар. Үлес алынғандықтан, үлкен облыс пен шағын облыс әділ салыстырылады.", en:"Place, period, indicator (a share, so already scaled), what happened (grew more slowly) and a comparison (national average). Because it's a share, big and small regions compare fairly."}},
+  {id:"h10", sec:"health", ans:"weak", code:"parts",
+   q:{kk:"Балалардағы аллергия көбейді.", en:"Allergies in children have increased."},
+   why:{kk:"Қай жерде? Қай жылдары? Немен өлшенеді: тіркелген диагноз саны ма, әлде 1000 балаға шаққанда ма? Төрт бөліктің үшеуі жоқ, сондықтан тексеруге келмейді.", en:"Where? Which years? Measured how: registered diagnoses, or per 1,000 children? Three of the four parts are missing, so it can't be tested."}}
+]};
+
+/* 4-қадам: гипотезаға лайық нөлдік жол */
+const NV = (kk, en) => ({kk, en});
+EX.null = {items: [
+  {id:"n1", sec:"health",
+   q:NV("Гипотеза: 2017–2019 жылдары Маңғыстауда мың адамға шаққандағы өлім ел бойынша көрсеткіштен жылдамырақ өсті.", "Hypothesis: between 2017 and 2019, deaths per 1,000 people rose faster in Mangystau than nationally."),
+   opts:[
+    {id:"a", code:"confirm", t:NV("Егер дата Маңғыстауда өлімнің өскенін көрсетсе, гипотезам дұрыс.", "If the data shows deaths rose in Mangystau, my hypothesis is true.")},
+    {id:"b", t:NV("Егер Маңғыстаудағы мың адамға шаққандағы өлімнің өсімі ел бойынша өсімнен 1 пайыздық тармаққа жетпесе, гипотезам жалған.", "If the rise in Mangystau's deaths per 1,000 beats the national rise by less than 1 percentage point, my hypothesis is false.")},
+    {id:"c", code:"nothreshold", t:NV("Егер дата өлімнің өспегенін көрсетсе, гипотезам жалған.", "If the data shows deaths didn't rise, my hypothesis is false.")},
+    {id:"d", code:"sourcename", t:NV("Дереккөз: Ұлттық статистика бюросы.", "Source: Bureau of National Statistics.")}],
+   ans:"b",
+   why:NV("Дұрыс жолда үш нәрсе бар: көрсеткіш (мың адамға), салыстыру (ел бойынша) және шек (1 пайыздық тармақ). Шек болмаса, 0,1 пайыздық айырманы да «дәлел» деп алып кетуге болады.", "The right line has three things: the indicator (per 1,000), the comparison (national) and a threshold (1 percentage point). Without a threshold, even a 0.1-point gap could be called \"proof\".")},
+  {id:"n2", sec:"fin",
+   q:NV("Гипотеза: 2021–2026 жылдары Астанада бір бөлмелі пәтердің орташа бағасы орташа жалақыдан жылдам өсті.", "Hypothesis: between 2021 and 2026, the average price of a one-room flat in Astana grew faster than the average wage."),
+   opts:[
+    {id:"a", code:"restate", t:NV("Астанада пәтер бағасы жалақыдан жылдам өсті.", "In Astana, flat prices grew faster than wages.")},
+    {id:"b", code:"negation", t:NV("Пәтер бағасы өскен жоқ.", "Flat prices didn't grow.")},
+    {id:"c", t:NV("Егер пәтер бағасының өсімі жалақы өсімінен 5 пайыздық тармақтан аз асса немесе жалақы жылдам өссе, гипотезам жалған.", "If price growth beats wage growth by less than 5 percentage points, or wages grow faster, my hypothesis is false.")},
+    {id:"d", code:"authority", t:NV("Егер министрлік бағаның өскенін жоққа шығарса, гипотезам жалған.", "If the ministry denies that prices rose, my hypothesis is false.")}],
+   ans:"c",
+   why:NV("Гипотеза салыстыру туралы (баға мен жалақы), сондықтан жалған болу шарты да салыстыру туралы болуы керек. «Баға өскен жоқ» деген жай терістеу: баға 10 пайыз, жалақы 30 пайыз өссе, гипотеза жалған, бірақ бұл жол оны ұстамайды.", "The hypothesis is about a comparison (prices vs wages), so the falsification condition must be too. \"Prices didn't grow\" is plain negation: if prices rose 10% and wages 30%, the hypothesis is false, but this line wouldn't catch it.")},
+  {id:"n3", sec:"health",
+   q:NV("Гипотеза: 2015–2024 жылдары ауыл аудандарында 10 000 адамға шаққандағы дәрігер саны азайды, ал Алматы мен Астанада өсті.", "Hypothesis: between 2015 and 2024, doctors per 10,000 people fell in rural districts while rising in Almaty and Astana."),
+   opts:[
+    {id:"a", code:"confirm", t:NV("Егер дата ауылда дәрігер азайғанын көрсетсе, гипотезам дұрыс.", "If the data shows fewer doctors in rural areas, my hypothesis is true.")},
+    {id:"b", code:"negation", t:NV("Егер ауылда дәрігер жетіспейді деген пікір қате болса.", "If the opinion that villages lack doctors is wrong.")},
+    {id:"c", code:"nodatanull", t:NV("Егер дәрігер саны туралы кесте табылмаса, гипотезам жалған.", "If I can't find a table of doctor numbers, my hypothesis is false.")},
+    {id:"d", t:NV("Егер ауыл аудандарында 10 000 адамға шаққандағы дәрігер саны 2 пайыздан аз азайса не өссе, немесе Алматы мен Астанада өспесе, гипотезам жалған.", "If doctors per 10,000 in rural districts fell by less than 2%, or rose, or didn't rise in Almaty and Astana, my hypothesis is false.")}],
+   ans:"d",
+   why:NV("Гипотезаның екі бөлігі бар (ауыл азайды, қала өсті), сондықтан жалған болу шарты екеуін де қамтиды. Дата табылмауы гипотезаны жалған етпейді: ол «дата жетпеді» деген басқа нәтиже.", "The hypothesis has two parts (rural fell, cities rose), so the condition covers both. Not finding data doesn't make a hypothesis false: that's a different result, \"not enough data\".")},
+  {id:"n4", sec:"env",
+   q:NV("Гипотеза: 2019–2024 жылдары Ақтөбеде велосипед жолының ұзындығы кемінде 20 пайызға өсті.", "Hypothesis: between 2019 and 2024, the length of cycle lanes in Aktobe grew by at least 20%."),
+   opts:[
+    {id:"a", code:"confirm", t:NV("Егер дата велосипед жолы ұзарғанын көрсетсе, гипотезам дұрыс.", "If the data shows the cycle lanes got longer, my hypothesis is true.")},
+    {id:"b", code:"nothreshold", t:NV("Егер велосипед жолы ұзармаса, гипотезам жалған.", "If the cycle lanes didn't get longer, my hypothesis is false.")},
+    {id:"c", code:"restate", t:NV("2019–2024 жылдары Ақтөбеде велосипед жолының ұзындығы кемінде 20 пайызға өсті.", "Between 2019 and 2024, the length of cycle lanes in Aktobe grew by at least 20%.")},
+    {id:"d", t:NV("Егер дата өсімнің 20 пайыздан аз екенін немесе жолдың қысқарғанын көрсетсе, гипотезам жалған.", "If the data shows growth under 20%, or that the lanes got shorter, my hypothesis is false.")}],
+   ans:"d",
+   why:NV("Гипотезада шек бар (кемінде 20 пайыз), сондықтан жалған болу шарты сол шекті қолданады. «Ұзармаса» деген жол 1 пайыздық өсімді де растау деп санап жібереді.", "The hypothesis has a threshold (at least 20%), so the condition uses it. \"Didn't get longer\" would count 1% growth as confirmation.")}
+]};
+
+/* 5-қадам: сан жаттығуы. lo..hi = қабылданатын аралық; cands = жиі қателердің мәні мен коды */
+const NUM = [
+  {id:"m_d", lo:11.55, hi:11.7, gen:"pcGen",
+   q:{kk:"Маңғыстау: қайтыс болғандар саны 2017 жылдан 2019 жылға қанша пайызға өсті?", en:"Mangystau: by what % did the number of deaths change from 2017 to 2019?"},
+   calc:{kk:"(3 051 − 2 733) / 2 733 × 100 = 11,6", en:"(3,051 − 2,733) / 2,733 × 100 = 11.6"},
+   why:{kk:"11,6 пайыз. Бұл абсолют санның өзгерісі, яғни мақаладағы «өлім көбейді» деген сан.", en:"11.6%. That's the change in the absolute number, the \"deaths are up\" figure an article would use."},
+   cands:[{v:10.42, code:"divnew"}, {v:0.1164, code:"no100", tol:0.002}, {v:318, code:"diffonly", tol:0.5}, {v:111.64, code:"ratio"}, {v:2.67, code:"wrongrow"}]},
+  {id:"k_d", lo:2.65, hi:2.75, gen:"pcGen",
+   q:{kk:"Қазақстан: қайтыс болғандар саны 2017 жылдан 2019 жылға қанша пайызға өсті?", en:"Kazakhstan: by what % did the number of deaths change from 2017 to 2019?"},
+   calc:{kk:"(132 621 − 129 173) / 129 173 × 100 = 2,7", en:"(132,621 − 129,173) / 129,173 × 100 = 2.7"},
+   why:{kk:"2,7 пайыз. Маңғыстаудағы өсім елдікінен төрт есеге жуық жылдам көрінеді. Бірақ бұл әлі абсолют сан.", en:"2.7%. Mangystau's rise looks about four times faster. But these are still absolute numbers."},
+   cands:[{v:2.6, code:"divnew", tol:0.004}, {v:0.0267, code:"no100", tol:0.001}, {v:3448, code:"diffonly", tol:0.5}, {v:102.67, code:"ratio"}, {v:11.64, code:"wrongrow"}]},
+  {id:"m_p", lo:5.45, hi:5.55, gen:"pcGen",
+   q:{kk:"Маңғыстау: халық саны (1 қаңтар) 2017 жылдан 2019 жылға қанша пайызға өсті?", en:"Mangystau: by what % did the population (1 January) change from 2017 to 2019?"},
+   calc:{kk:"(678 766 − 643 379) / 643 379 × 100 = 5,5", en:"(678,766 − 643,379) / 643,379 × 100 = 5.5"},
+   why:{kk:"5,5 пайыз. Өлім 11,6 пайызға өссе, оның жартысына жуығын халықтың өсуі түсіндіреді. Нөлдік гипотезаның ізі осы.", en:"5.5%. If deaths rose 11.6%, population growth explains nearly half of it. That's the trace of the null hypothesis."},
+   cands:[{v:5.21, code:"divnew"}, {v:0.055, code:"no100", tol:0.001}, {v:35387, code:"diffonly", tol:0.5}, {v:105.5, code:"ratio", tol:0.1}, {v:2.67, code:"wrongrow"}]},
+  {id:"m_r17", lo:4.24, hi:4.26, gen:"rateGen",
+   q:{kk:"Маңғыстау, 2017: мың адамға шаққанда неше адам қайтыс болды? (2 таңба)", en:"Mangystau, 2017: deaths per 1,000 people (2 decimals)"},
+   calc:{kk:"2 733 / 643 379 × 1000 = 4,25", en:"2,733 / 643,379 × 1,000 = 4.25"},
+   why:{kk:"4,25.", en:"4.25."},
+   cands:[{v:4.19, code:"avgpop", ok:true, tol:0.006}, {v:0.425, code:"per100", tol:0.003}, {v:0.00425, code:"per1", tol:0.0001}, {v:424.8, code:"per100k", tol:0.5}, {v:235.4, code:"inverted", tol:0.5}, {v:4.03, code:"wrongyear", tol:0.006}]},
+  {id:"m_r19", lo:4.49, hi:4.5, gen:"rateGen",
+   q:{kk:"Маңғыстау, 2019: мың адамға шаққанда", en:"Mangystau, 2019: deaths per 1,000 people"},
+   calc:{kk:"3 051 / 678 766 × 1000 = 4,49", en:"3,051 / 678,766 × 1,000 = 4.49"},
+   why:{kk:"4,49.", en:"4.49."},
+   cands:[{v:4.43, code:"avgpop", ok:true, tol:0.006}, {v:0.449, code:"per100", tol:0.003}, {v:0.0045, code:"per1", tol:0.0001}, {v:449.5, code:"per100k", tol:0.5}, {v:222.5, code:"inverted", tol:0.5}, {v:4.74, code:"wrongyear", tol:0.006}]},
+  {id:"k_r17", lo:7.2, hi:7.22, gen:"rateGen",
+   q:{kk:"Қазақстан, 2017: мың адамға шаққанда", en:"Kazakhstan, 2017: deaths per 1,000 people"},
+   calc:{kk:"129 173 / 17 916 623 × 1000 = 7,21", en:"129,173 / 17,916,623 × 1,000 = 7.21"},
+   why:{kk:"7,21.", en:"7.21."},
+   cands:[{v:7.16, code:"avgpop", ok:true, tol:0.006}, {v:0.721, code:"per100", tol:0.003}, {v:0.0072, code:"per1", tol:0.0001}, {v:721, code:"per100k", tol:0.6}, {v:138.7, code:"inverted", tol:0.3}]},
+  {id:"k_r19", lo:7.2, hi:7.22, gen:"rateGen",
+   q:{kk:"Қазақстан, 2019: мың адамға шаққанда", en:"Kazakhstan, 2019: deaths per 1,000 people"},
+   calc:{kk:"132 621 / 18 394 642 × 1000 = 7,21", en:"132,621 / 18,394,642 × 1,000 = 7.21"},
+   why:{kk:"7,21. Ел бойынша өлім деңгейі екі жылда өзгермеген: өлім саны халықпен бірдей қарқынмен өскен.", en:"7.21. The national death rate didn't move: deaths grew at exactly the pace of the population."},
+   cands:[{v:7.16, code:"avgpop", ok:true, tol:0.006}, {v:0.721, code:"per100", tol:0.003}, {v:0.0072, code:"per1", tol:0.0001}, {v:721, code:"per100k", tol:0.6}, {v:138.7, code:"inverted", tol:0.3}]},
+  {id:"m_rc", lo:5.6, hi:5.9, gen:"pcGen",
+   q:{kk:"Маңғыстау: мың адамға шаққандағы өлім 2017 жылдан 2019 жылға қанша пайызға өсті?", en:"Mangystau: by what % did deaths per 1,000 change from 2017 to 2019?"},
+   calc:{kk:"(4,49 − 4,25) / 4,25 × 100 = 5,6, ал дөңгелектемей есептесеңіз 5,8", en:"(4.49 − 4.25) / 4.25 × 100 = 5.6, or 5.8 without rounding"},
+   why:{kk:"Шамамен 5,8 пайыз (дөңгелектелген сандардан 5,6). Бұл 11,6-ның жартысы: «өлім көбейді» деген тақырып екі есе үлкейтілген болып шықты.", en:"About 5.8% (5.6 from the rounded rates). That's half of 11.6: a \"deaths are up\" headline would double the real change."},
+   cands:[{v:11.64, code:"absnotrate"}, {v:0.24, code:"ppNotPct", tol:0.011}, {v:5.5, code:"popchange", tol:0.04}, {v:5.35, code:"divnew", tol:0.06}]}
+];
+
+/* 5-қадам: шешім */
+const VERD = [
+  {id:"supp", t:{kk:"Расталды", en:"Supported"}},
+  {id:"rej", t:{kk:"Жоққа шықты", en:"Not supported"}},
+  {id:"nodata", t:{kk:"Дата жетпеді", en:"Not enough data"}}
+];
+const vOpts = codes => VERD.map(v => Object.assign({}, v, {code:codes[v.id]}));
+EX.dec = {items: [
+  {id:"d1", q:NV("Гипотеза: 2017–2019 жылдары Маңғыстауда мың адамға шаққандағы өлімнің өсімі ел бойынша өсімнен кемінде 1 пайыздық тармаққа асып түсті.", "Hypothesis: between 2017 and 2019, the rise in Mangystau's deaths per 1,000 beat the national rise by at least 1 percentage point."),
+   opts:vOpts({rej:"decRejWrong", nodata:"decHaveData"}), ans:"supp",
+   why:NV("Расталды: Маңғыстауда +5,8 пайыз, ел бойынша 0,0 пайыз. Айырма 5,8 пайыздық тармақ, шектен (1) әлдеқайда көп. Нөлдік гипотеза («тек халық өсті») бұл кезең үшін толық ақталмады: халық өсімі өсімнің жартысын ғана түсіндіреді.", "Supported: Mangystau +5.8%, national 0.0%. The gap is 5.8 percentage points, well above the threshold (1). The null (\"only the population grew\") doesn't fully hold for this period: population growth explains only half of the rise.")},
+  {id:"d2", q:NV("Гипотеза: 2016–2019 жылдары Маңғыстауда мың адамға шаққандағы өлім жыл сайын өсті. (Кестедегі 2016 және 2018 жылдарды да есептеңіз.)", "Hypothesis: between 2016 and 2019, deaths per 1,000 in Mangystau rose every year. (Work out 2016 and 2018 from the table too.)"),
+   opts:vOpts({supp:"decBaseYear", nodata:"decHaveData"}), ans:"rej",
+   why:NV("Жоққа шықты: 4,46 (2016), 4,25 (2017), 4,55 (2018), 4,49 (2019). Деңгей төмендеп, көтеріліп, қайта түскен. 2017 жыл 2009 жылдан бергі ең төмен жыл болды, сондықтан одан бастаған өсім үлкен көрінеді. 2016 жылмен салыстырсақ, өсім 1 пайызға да жетпейді. Бастапқы жылды таңдау нәтижені өзгертеді.", "Not supported: 4.46 (2016), 4.25 (2017), 4.55 (2018), 4.49 (2019). The rate fell, rose, then fell again. 2017 was the lowest year since 2009, so any change measured from it looks big. From 2016 the rise is under 1%. The choice of starting year changes the result.")},
+  {id:"d3", q:NV("Гипотеза: Маңғыстауда өлім деңгейі ел бойынша төмен, себебі облыс халқы жас.", "Hypothesis: Mangystau's death rate is below the national rate because the region's population is young."),
+   opts:vOpts({supp:"decCausal", rej:"decNoEvidence"}), ans:"nodata",
+   why:NV("Дата жетпеді: кестеде жас бойынша ештеңе жоқ. Деңгейдің төмендігі расталады (4,49 мен 7,21), бірақ «себебі» бөлігін тексеру үшін облыс халқының жас құрамы керек. Бұл 6-қадамның тақырыбы.", "Not enough data: the table has nothing on age. The lower rate is confirmed (4.49 vs 7.21), but checking the \"because\" part needs the region's age structure. That's step 6.")}
+]};
+
+/* 6-қадам: балама түсіндірмені жоққа шығаратын екінші дата */
+EX.extra = {items: [
+  {id:"x1", sec:"health",
+   q:NV("Маңғыстауда мың адамға шаққандағы өлім ел бойынша деңгейден әлдеқайда төмен (4,49 мен 7,21). Ең ықтимал балама түсіндірме: облыс халқы жас. Мұны тексеру үшін қандай екінші дата керек?", "Mangystau's deaths per 1,000 are far below the national rate (4.49 vs 7.21). The most likely alternative explanation: the region's population is young. What second dataset tests that?"),
+   opts:[
+    {id:"a", t:NV("Облыс халқының жас құрамы және жас топтары бойынша өлім", "The region's age structure and deaths by age group")},
+    {id:"b", code:"notalt", t:NV("Облыстағы аурухана саны", "Number of hospitals in the region")},
+    {id:"c", code:"notalt", t:NV("Облыстағы орташа ауа температурасы", "Average air temperature in the region")},
+    {id:"d", code:"notalt", t:NV("Облыстық денсаулық сақтау бюджеті", "Regional health budget")}],
+   ans:"a",
+   why:NV("Жасы үлкен адам көп өңірде өлім де көп. Жас құрамы ұқсас өңірлерді салыстыру немесе жас топтары бойынша өлімді қарау ғана «халқы жас» деген түсіндірмені тексереді. Аурухана мен бюджет басқа гипотезаға керек.", "A region with more older people has more deaths. Only age structure, or deaths by age group, tests the \"young population\" explanation. Hospitals and budgets belong to a different hypothesis.")},
+  {id:"x2", sec:"fin",
+   q:NV("Мысал (сан шартты): 2019–2023 жылдары бір облыста орташа жалақы 60 пайызға өсті, «демек тұрмыс жақсарды». Қандай екінші дата керек?", "Example (made-up number): between 2019 and 2023 the average wage in a region rose 60%, \"so living standards improved\". What second dataset do you need?"),
+   opts:[
+    {id:"a", code:"popNotHere", t:NV("Облыс халқының саны", "The region's population")},
+    {id:"b", t:NV("Сол жылдардағы тұтыну бағасының индексі (инфляция)", "The consumer price index (inflation) for the same years")},
+    {id:"c", code:"notalt", t:NV("Жұмыс істейтіндер саны", "The number of people in work")},
+    {id:"d", code:"nodataset", t:NV("Жалақы туралы жаңалықтар", "News stories about wages")}],
+   ans:"b",
+   why:NV("Баға 60 пайыздан көп өссе, жалақы өскенмен тұрмыс жақсармаған. Ақшаға қатысты кез келген өсімді инфляциямен салыстырасыз: нақты жалақы.", "If prices rose more than 60%, living standards didn't improve. Any money figure gets compared with inflation: the real wage.")},
+  {id:"x3", sec:"hr",
+   q:NV("Мысал: ескі жинақта Шығыс Қазақстан облысының халқы 2022 жылдан 2023 жылға қарай күрт азайған болып көрінеді. Алдымен нені тексересіз?", "Example: in an older table, East Kazakhstan's population seems to drop sharply between 2022 and 2023. What do you check first?"),
+   opts:[
+    {id:"a", code:"migFirst", t:NV("Көші-қон статистикасы", "Migration statistics")},
+    {id:"b", code:"notalt", t:NV("Қайтыс болғандар саны", "Number of deaths")},
+    {id:"c", t:NV("Әкімшілік-аумақтық өзгеріс: 2022 жылы облыстан Абай облысы бөлініп шықты", "Boundary change: in 2022 Abai region was split off from it")},
+    {id:"d", code:"notalt", t:NV("Туу саны", "Number of births")}],
+   ans:"c",
+   why:NV("Халық бір жылда үштен бірге «азаюы» адамдардан емес, шекарадан болуы мүмкін. 2018 жылы (Шымкент пен Түркістан) және 2022 жылы (Абай, Жетісу, Ұлытау) облыстар өзгерді. Ұзақ қатарды салыстырмас бұрын кестенің ескертпесін оқыңыз: бюро деректерді жаңа шекараға қайта есептеген бе?", "A third of a population \"vanishing\" in a year is more likely boundaries than people. Regions changed in 2018 (Shymkent and Turkistan) and 2022 (Abai, Zhetisu, Ulytau). Before comparing a long series, read the table's footnote: has the Bureau recalculated the data to the new boundaries?")},
+  {id:"x4", sec:"sec",
+   q:NV("Мысал (сан шартты): бір облыста тұрмыстық зорлық туралы тіркелген арыз саны бір жылда екі есе өсті. Қандай түсіндірмені алдымен жоққа шығару керек?", "Example (made-up number): registered domestic-violence complaints in a region doubled in a year. Which explanation do you rule out first?"),
+   opts:[
+    {id:"a", t:NV("Тіркеу тәртібі не заң өзгерді: арызды қалай, қай жерде тіркейтіні", "A change in the law or in how complaints are registered")},
+    {id:"b", code:"popNotHere", t:NV("Облыс халқы көбейді", "The region's population grew")},
+    {id:"c", code:"notalt", t:NV("Тұтыну бағасы өсті", "Consumer prices rose")},
+    {id:"d", code:"nodataset", t:NV("Полицияның баспасөз хабарламалары", "Police press releases")}],
+   ans:"a",
+   why:NV("Тіркелген оқиғаның саны оқиғаның өзін емес, тіркеуді өлшейді. Заң не тәртіп өзгерсе, арыз беру оңайлап, сан өседі, ал зорлық көбеймеуі мүмкін. Халық бір жылда екі есе өспейді.", "A count of registered cases measures registration, not the event itself. If the law or procedure changed, reporting gets easier and the count rises even if violence didn't. Populations don't double in a year.")}
+]};
+
+/* 7-қадам: үлгі стори (драфт). Сандар: _ҮЛГІ_СТОРИ_ТЕКСЕРУГЕ.md */
+const STORY = {
+kk: `<div class="story"><span class="badge">Үлгі · Асхат Еркімбай (драфт)</span>
+<h3>Маңғыстауда өлім көбейді ме, әлде тұрғын көбейді ме?</h3>
+<p class="p-lead"><span class="lab">Лид</span>2019 жылы Маңғыстау облысында 3 051 адам қайтыс болды. Бұл 2017 жылғыдан 11,6 пайыз көп, ал бүкіл елде өлім осы екі жылда 2,7 пайызға ғана өскен.</p>
+<p class="p-nut"><span class="lab">Нат-граф: сан, салыстыру, күмән, келесі тексеру</span>Алайда бұл өсімнің жартысына жуығын облыс халқының өзі түсіндіреді: екі жылда Маңғыстау тұрғындары 5,5 пайызға көбейді. Мың адамға шаққанда өлім 4,25-тен 4,49-ға көтерілді, яғни 5,8 пайызға өсті, ал ел бойынша бұл көрсеткіш 7,21 деңгейінде қалды. Өсім бар, бірақ алғашқы санның жартысындай ғана. Оның үстіне 2017 жыл облыста өлім деңгейі 2009 жылдан бергі ең төмен түскен жыл еді. 2016 жылмен салыстырсақ (4,46), айырма 1 пайызға да жетпейді. Келесі тексеру: облыс халқының жас құрамы мен өлім себептері.</p>
+<p class="p-ev"><span class="lab">Дәлел</span>Маңғыстау 2019 жылы да өлім деңгейі ең төмен өңірлердің бірі болды: бюроның ресми коэффициенті бойынша Астанадан кейін екінші орында. Бұл облыс халқының жас екенімен байланысты болуы мүмкін, бірақ оны тек жас бойынша дата көрсетеді.</p>
+<p class="p-src"><span class="lab">Дереккөз жолы</span>Дереккөз: ҚР Стратегиялық жоспарлау және реформалар агенттігінің Ұлттық статистика бюросы, «Қайтыс болғандар саны» және «Халық саны, жыл басына» кестелері, 2016–2019. Мың адамға шаққан көрсеткішті автор жыл басындағы халық санымен есептеді. Бюроның ресми коэффициенті жылдың орташа халқымен есептеледі (Маңғыстау: 4,19 және 4,43).</p></div>`,
+en: `<div class="story"><span class="badge">Model · Askhat Yerkimbay (draft)</span>
+<h3>More deaths in Mangystau, or more people?</h3>
+<p class="p-lead"><span class="lab">Lead</span>In 2019, 3,051 people died in Mangystau region, 11.6% more than in 2017. Across Kazakhstan, deaths rose by just 2.7% over the same two years.</p>
+<p class="p-nut"><span class="lab">Nut graf: number, comparison, doubt, next check</span>But the region's own growth explains nearly half of that rise: Mangystau's population grew 5.5% in those two years. Per 1,000 residents, deaths went from 4.25 to 4.49, up 5.8%, while the national rate stayed flat at 7.21. So there is a rise, but it's about half the size the raw count suggests. And 2017 is a shaky starting point: it was the region's lowest death rate since 2009. Measured from 2016 (4.46), the increase is under 1%. The next check: the region's age structure and causes of death.</p>
+<p class="p-ev"><span class="lab">Evidence</span>Mangystau still had one of the lowest death rates in the country in 2019, second only to Astana on the Bureau's official rate. A young population may explain that, but only data by age can show it.</p>
+<p class="p-src"><span class="lab">Source line</span>Source: Bureau of National Statistics, Agency for Strategic Planning and Reforms of Kazakhstan; tables "Number of deaths" and "Population, start of year", 2016–2019. Rates per 1,000 calculated by the author using start-of-year population. The Bureau's official rate uses the average annual population (Mangystau: 4.19 and 4.43).</p></div>`
+};
+
+</script>
+<script>
+/* ===== Кері байланыс: қате коды бойынша. h = 1-қатеден кейінгі қысқа кеңес, m = 2-қатеден кейінгі толық көмек.
+   Кодтар _қате_үлгілері.md файлындағы Қ1–Қ9 қателеріне және Т1–Т6 тексерулеріне сәйкес. ===== */
+const ERR = {
+/* --- Т1. Тұжырым ба? (Қ6, Қ8) --- */
+topic:{kk:{h:"Мұнда тұжырым жоқ: не болғаны айтылмайды. Бұл тақырып, айнымалылар тізімі немесе жоспар.",
+  m:"Тұжырым «X болды» деп аяқталады: «өсті», «азайды», «артта қалды», «екі есе көп болды». Тізімнен бір көрсеткішті алып, сол көрсеткішке не болғанын жазыңыз. Тақырып ауыстырудың басты себебі осы: тақырып гипотезаға айналмай тұрып бекітіледі."},
+ en:{h:"There's no claim here: it doesn't say what happened. It's a topic, a list of variables or a plan.",
+  m:"A claim ends with what happened: \"rose\", \"fell\", \"fell behind\", \"was twice as high\". Pick one indicator from the list and say what happened to it. This is the main reason students change topics: the topic gets approved before it becomes a hypothesis."}},
+plan:{kk:{h:"«Салыстырамын», «зерттеймін» деген жоспар, тұжырым емес.",
+  m:"Жоспарды теріске шығару мүмкін емес, себебі онда нәтиже жоқ. Салыстырғанда не шығады деп ойлайсыз? Соны жазыңыз: «А облысы Б облысынан 15 балға артта қалды»."},
+ en:{h:"\"I will compare\" or \"I will look at\" is a plan, not a claim.",
+  m:"A plan can't be proven false because it has no result in it. What do you expect the comparison to show? Write that: \"Region A fell 15 points behind region B.\""}},
+question:{kk:{h:"Бұл сұрақ. Сұраққа кез келген жауап жарайды, ал гипотеза не расталады, не расталмайды.",
+  m:"Өзіңізден сұраңыз: бұл сұраққа қандай жауап күтемін? Сол жауапты тұжырым етіп жазыңыз. «Жастар өз мамандығы бойынша жұмыс істей ме?» деген сұрақтан: «2023 жылғы түлектердің жартысынан азы бір жылдан кейін өз мамандығы бойынша жұмыс істеді.»"},
+ en:{h:"This is a question. Any answer fits a question; a hypothesis is either supported or not.",
+  m:"Ask yourself what answer you expect, and write that answer as a claim. From \"Do young people work in their field?\" to \"Fewer than half of 2023 graduates worked in their field a year later.\""}},
+isclaim:{kk:{h:"Бұл сөйлемде тұжырым бар: бір нәрсенің болғаны айтылып тұр. Енді оның әлсіз не күшті екенін анықтаңыз.",
+  m:"Төрт бөлікті тексеріңіз: қай жерде, қай кезеңде, не өлшенеді, не болды. Бәрі бар және салыстыру болса, күшті. Біреуі жоқ, себеп айтылған, абсолют сан салыстырылған не дереккөз датасет емес болса, әлсіз."},
+ en:{h:"This sentence does make a claim: it says something happened. Now decide whether it's weak or strong.",
+  m:"Check the four parts: where, when, what is measured, what happened. All present plus a comparison: strong. One missing, a cause claimed, raw counts compared or a source that isn't a dataset: weak."}},
+strongok:{kk:{h:"Төрт бөлігін қайта тексеріңіз: бәрі бар сияқты.",
+  m:"Орын, кезең, көрсеткіш, не болды және немен салыстырылатыны: осы сөйлемде бәрі тұр. Көрсеткіш адам басына не үлеске шағылған, себеп айтылмайды. Мұндай гипотеза күшті."},
+ en:{h:"Check the four parts again: they all seem to be there.",
+  m:"Place, period, indicator, what happened and what it's compared with: all in this sentence. The indicator is per head or a share, and no cause is claimed. That makes it strong."}},
+/* --- Т2. Төрт бөлік (Қ2) --- */
+parts:{kk:{h:"Төрт бөліктің бірнешеуі жоқ: орын, кезең, өлшем.",
+  m:"Ең жиі түсіп қалатыны кезең. «Көбейді» дегенде: қай жылдан қай жылға? Қай жерде? Немен өлшенеді?"},
+ en:{h:"Several of the four parts are missing: place, period, measure.",
+  m:"The period is the one most often left out. \"Increased\": from which year to which? Where? Measured how?"}},
+noperiod:{kk:{h:"Кезең жоқ: гипотезада екі жыл болуы керек (мысалы 2017–2019).",
+  m:"Студенттердің гипотезасында ең жиі түсіп қалатын бөлік осы. Өзгеріс екі нүкте арасында өлшенеді: «2020–2025 жылдары». Бір жыл ғана болса, бұл өзгеріс емес, бір кездегі жағдай."},
+ en:{h:"No period: the hypothesis needs two years (e.g. 2017–2019).",
+  m:"This is the part students leave out most. Change is measured between two points: \"between 2020 and 2025\". With only one year you have a snapshot, not a change."}},
+noplace:{kk:{h:"Орын жазылмаған: қай ел, облыс, қала, аудан?",
+  m:"«Әлеуметтік желіде», «солтүстікте» деген орын өлшенбейді. Статистика бөлінетін аумақты жазыңыз: облыс, қала, аудан."},
+ en:{h:"No place: which country, region, city, district?",
+  m:"\"On social media\" or \"in the north\" can't be measured. Use a unit statistics are published for: region, city, district."}},
+nocompare:{kk:{h:"Салыстыру жоқ: немен салыстырғанда?",
+  m:"Жалғыз сан ештеңе айтпайды. Ел бойынша орташамен, көрші облыспен не он жыл бұрынғы жағдаймен салыстырыңыз. Салыстыруды сөйлемнің ішіне салыңыз: «..., ал ел бойынша өзгермеді»."},
+ en:{h:"No comparison: compared with what?",
+  m:"A number on its own says nothing. Compare with the national average, a neighbouring region or the same place ten years ago, and build it into the sentence: \"..., while the national figure didn't change.\""}},
+/* --- Т3. Көрсеткіш (Қ3) --- */
+absrate:{kk:{h:"Абсолют сан салыстырылып тұр. Халқы көп жерде оқиға да көп болады.",
+  m:"Әртүрлі көлемдегі аумақты салыстырғанда көрсеткіш алыңыз: 1000 не 100 мың тұрғынға шаққанда, үлес, орташа. Абсолют сан көбіне «қай жерде адам көп» дегенді ғана көрсетеді (Лаб 5)."},
+ en:{h:"Raw counts are being compared. Places with more people have more of everything.",
+  m:"When areas differ in size, use a rate: per 1,000 or 100,000 residents, a share, an average. A raw count often just tells you where more people live (Lab 5)."}},
+kindmissing:{kk:{h:"Көрсеткіштің түрін таңдаңыз: санау ма, әлде адам басына шағылған көрсеткіш пе?",
+  m:"Мұны гипотеза жазған сәтте шешіңіз, есептеу кезінде емес. Жоба 1-дегі қателердің көбі осыдан шықты: гипотеза жазылғанда өлшем белгісіз болды."},
+ en:{h:"Choose the kind of indicator: a count, or a rate per head?",
+  m:"Decide this while writing the hypothesis, not while calculating. Many Project 1 errors started here: the measure was unclear when the hypothesis was written."}},
+nounit:{kk:{h:"Бірлігі жазылмаған: адам, теңге, пайыз, 1000 адамға?",
+  m:"Бірлік болмаса, шек те болмайды. «Табыс» пен «кедейлік үлесі», «баға деңгейі» мен «инфляция қарқыны» әртүрлі нәрсе."},
+ en:{h:"No unit: people, tenge, per cent, per 1,000?",
+  m:"No unit, no threshold. \"Income\" and \"poverty share\", \"price level\" and \"inflation rate\" are different things."}},
+/* --- Т4. Себеп пе, өзгеріс пе (Қ4) --- */
+causal:{kk:{h:"Сөйлемде себеп айтылған. Дата өзгерісті көрсетеді, себепті көрсетпейді.",
+  m:"«Себебінен», «салдарынан», «ықпал етті» деген бөлікті бөлек белгілеңіз: ол қосымша дата мен басқа жермен салыстыруды қажет етеді (6-қадам). Негізгі гипотезада тек өлшенетін өзгеріс қалсын."},
+ en:{h:"The sentence claims a cause. Data shows change, not cause.",
+  m:"Flag the \"because\" / \"due to\" part separately: it needs extra data and a comparison with a place where the cause is absent (step 6). Keep only the measurable change in the main hypothesis."}},
+/* --- Қ9 --- */
+vague:{kk:{h:"Өлшенбейтін сөз бар («нашар», «шамадан тыс», «сапасыз»).",
+  m:"Бұл сөздер баға береді, өлшемейді. Оның орнына сан не шек жазыңыз: «15 пайыздан астам», «кемінде 1,5 есе»."},
+ en:{h:"There's an unmeasurable word (\"bad\", \"too much\", \"poor\").",
+  m:"These words judge, they don't measure. Use a number or a threshold instead: \"more than 15%\", \"at least 1.5 times\"."}},
+twoclaims:{kk:{h:"Бір сөйлемде екі тұжырым тұрған сияқты.",
+  m:"Екіге бөліп, біреуін таңдаңыз. Екі тұжырымның біреуі расталып, біреуі расталмаса, гипотеза туралы не айтасыз?"},
+ en:{h:"There seem to be two claims in one sentence.",
+  m:"Split it and pick one. If one part is supported and the other isn't, what would you say about the hypothesis?"}},
+/* --- Т6. Дата сыйыса ма (Қ5, Қ7) --- */
+fitperiod:{kk:{h:"Гипотезаның жылдары 2-қадамда жазған датаңыздың жылдарынан шығып кетті.",
+  m:"Не датаны кеңейтіңіз (жетпейтін жылдарды табыңыз), не гипотезаны датаға тарылтыңыз. Гипотеза алты жылды айтып, дата бір жылды берсе, тексеру мүмкін емес."},
+ en:{h:"Your hypothesis's years go beyond the years of the data you named in step 2.",
+  m:"Either widen the data (find the missing years) or narrow the hypothesis to fit it. A six-year hypothesis can't be tested on one year of data."}},
+fitlevel:{kk:{h:"Гипотеза мен датаның аумағы сәйкес емес (облыс пен қала не облыс пен аудан).",
+  m:"Гипотеза аудан туралы, ал дата облыс бойынша болса, тексеру мүмкін емес. Алматы қаласы мен Алматы облысы да екі бөлек аумақ. Не дата іздеңіз, не гипотезаны датаның деңгейіне көтеріңіз."},
+ en:{h:"The hypothesis and the data cover different areas (region vs city, or region vs district).",
+  m:"A district-level hypothesis can't be tested on regional data. Almaty city and Almaty region are separate units too. Find finer data or lift the hypothesis to the data's level."}},
+nodataset:{kk:{h:"Дереккөз датасет емес: пресс-релиз, жаңалық не біреудің сөзі.",
+  m:"Бұлар тақырыпқа сигнал бола алады, бірақ тексеру үшін кесте керек: кім жинады, қай жылдар, қандай бөлініс. Бірнеше оқиға тұтас құбылыстың өлшемі бола алмайды."},
+ en:{h:"The source isn't a dataset: a press release, a news story or someone's statement.",
+  m:"These can signal a topic, but testing needs a table: who collected it, which years, what breakdown. A handful of cases can't measure a whole phenomenon."}},
+hypEmpty:{kk:{h:"Гипотеза өрісі бос. Құрастырғышты толтырып, «Құрастырылғанды көшіру» батырмасын басыңыз да, сөйлемді өзіңіз түзетіңіз.", m:""},
+ en:{h:"The hypothesis box is empty. Fill in the builder, press \"Copy the draft\", then polish the sentence yourself.", m:""}},
+
+/* --- 2-қадам: төркін жаттығуы --- */
+secondary:{kk:{h:"Бұл санды қайталап жазған дереккөз, санды жинаған орган емес.",
+  m:"Төркін деп датаны өзі жинаған органды, оның нақты кестесін және жылдарын айтамыз. Сайт, арна, агенттік оны қайталайды. Тізбек бойымен жоғары көтеріліп, кестеге жетіңіз."},
+ en:{h:"This source repeats the number; it didn't collect it.",
+  m:"The origin is the body that collected the data, its exact table and years. Sites, channels and agencies repeat it. Follow the chain up to the table."}},
+press:{kk:{h:"Пресс-релиз санды хабарлайды, бірақ өзі датасет емес.",
+  m:"Пресс-релизде кейде сан дөңгелектеніп, кейде ыңғайлы жылдар ғана алынады. Сол органның не статистика бюросының кестесін тауып, санды өзіңіз салыстырыңыз."},
+ en:{h:"A press release reports a number, but it isn't a dataset.",
+  m:"Press releases round numbers and pick convenient years. Find the table (the body's own, or the statistics bureau's) and check the number yourself."}},
+person:{kk:{h:"Адамның сөзі дата емес, ол тексерілетін тұжырым.",
+  m:"Сарапшының, дәрігердің не экономистің пікірі мақалаға дауыс береді, бірақ санның төркіні бола алмайды."},
+ en:{h:"A person's words aren't data; they're a claim to be checked.",
+  m:"An expert's, doctor's or economist's view gives the story a voice, but it can't be the origin of a number."}},
+pct:{kk:{h:"Біреудің дайын пайызы: ол қандай кестеден, қай жылдардан есептелгені белгісіз.",
+  m:"Дайын пайызды ешқашан көшірмеңіз. Бастапқы кестені тауып, ЖЕБЕ-мен өзіңіз қайта есептеңіз. Сәйкес келмесе, айырманың себебін іздеңіз."},
+ en:{h:"Someone else's ready-made percentage: we don't know which table or years it came from.",
+  m:"Never copy a ready-made percentage. Find the original table and recalculate it yourself with DART. If it doesn't match, find out why."}},
+authority:{kk:{h:"Шенеуніктің мәлімдемесі не жоққа шығаруы дата емес.",
+  m:"Министр «жақсарды» десе де, «жоқ» десе де, бұл тексерілетін тұжырым. Гипотезаның тағдырын тек өлшеу шешеді."},
+ en:{h:"An official's statement or denial isn't data.",
+  m:"Whether a minister says \"it improved\" or \"it didn't happen\", that's a claim to test. Only measurement decides a hypothesis."}},
+anecdote:{kk:{h:"Тұрғындардың шағымы оқиғаның бар екенін көрсетеді, бірақ оның көлемін өлшемейді.",
+  m:"Шағым кейіпкер табуға көмектеседі. Өзгерістің көлемін өлшеу үшін бекеттердің жүйелі өлшеуі керек."},
+ en:{h:"Residents' complaints show the problem exists, but don't measure its size.",
+  m:"Complaints help you find people to interview. Measuring change needs systematic readings from monitoring stations."}},
+
+/* --- 2-қадам: өз датаңыз --- */
+s2body:{kk:{h:"Датаны жинаған органды жазыңыз (мысалы, Ұлттық статистика бюросы).", m:"Мақалада «мәлімет бойынша» деп қана жазылса, органды өзіңіз іздеп табасыз. Таппасаңыз, бұл сары не қызыл белгі."},
+ en:{h:"Name the body that collected the data (e.g. Bureau of National Statistics).", m:"If the article only says \"according to data\", you have to find the body yourself. If you can't, that's a yellow or red flag."}},
+s2table:{kk:{h:"Кестенің не көрсеткіштің нақты атауын жазыңыз.", m:"Атауы нақты болса, басқа адам дәл сол файлды таба алады. Бұл дереккөз жолына да керек болады (7-қадам)."},
+ en:{h:"Write the exact name of the table or indicator.", m:"With an exact name, someone else can find the same file. You'll need it for the source line too (step 7)."}},
+s2years:{kk:{h:"Датаның қай жылдарды қамтитынын жазыңыз: бастапқы және соңғы жыл.", m:"Кейін гипотезаның жылдары осы аралыққа сыя ма, соны тексереміз (3-қадам)."},
+ en:{h:"Write which years the data covers: first and last year.", m:"Later we check whether your hypothesis's years fit inside this range (step 3)."}},
+s2level:{kk:{h:"Датаның бөлінісін таңдаңыз: ел, облыс, қала, аудан.", m:"Ең жиі шығатын кедергі осы: гипотеза аудан туралы, дата облыс бойынша."},
+ en:{h:"Choose the data's breakdown: country, region, city, district.", m:"This is the most common obstacle: a district-level hypothesis with regional data."}},
+s2type:{kk:{h:"Дереккөздің түрін таңдаңыз.", m:""}, en:{h:"Choose the type of source.", m:""}},
+srcRed:{kk:{h:"Бұл түс қызыл: пресс-релиз, мақала, адамның сөзі не біреудің дайын пайызы датасет емес.",
+  m:"Гипотезаны тексеру үшін кесте керек. Осы дереккөз сілтеме жасаған органды тауып, оның кестесіне жетіңіз. Таппасаңыз, тақырыпты бекітпеңіз: семестр ортасында тақырып ауыстырудың бір себебі осы."},
+ en:{h:"This is red: a press release, article, statement or someone's percentage isn't a dataset.",
+  m:"Testing a hypothesis needs a table. Find the body this source relies on and get to its table. If you can't, don't lock in the topic: this is one of the reasons students end up changing topics mid-semester."}},
+srcSecond:{kk:{h:"Бұл бастапқы дереккөз емес. Санды жинаған органға дейін жетіңіз.", m:"Екінші қолдан алынған санда қате, дөңгелектеу не ыңғайлы жыл таңдау болуы мүмкін."},
+ en:{h:"This isn't the primary source. Trace it back to the body that collected it.", m:"Second-hand numbers can carry errors, rounding or cherry-picked years."}},
+srcUnknown:{kk:{h:"Бастапқы дереккөз бе, жоқ па, анықтаңыз.", m:"Сұраңыз: бұл санды кім өлшеді не санады? Сол органның сайтында сол сан бар ма?"},
+ en:{h:"Find out whether it's the primary source.", m:"Ask: who measured or counted this? Is the same number on that body's website?"}},
+
+/* --- 1-қадам --- */
+s1sector:{kk:{h:"Алты сектордың бірін таңдаңыз.", m:""}, en:{h:"Choose one of the six sectors.", m:""}},
+s1link:{kk:{h:"Мақаланың толық сілтемесін қойыңыз (https://...).", m:"Сілтеме ашылатынын өзіңіз тексеріңіз. ЖИ ұсынған сілтеме болса, міндетті түрде ашып көріңіз (Лаб 3)."},
+ en:{h:"Paste the article's full link (https://...).", m:"Check that it opens. If an AI suggested it, open it without fail (Lab 3)."}},
+s1num:{kk:{h:"Сөйлемде сан жоқ. Мақала қай санға сүйенеді?", m:"Мысалы: «Мақала Маңғыстауда 2019 жылы 3 051 адам қайтыс болғанына, яғни 2017 жылдан 11,6 пайыз көп екеніне сүйенеді.» Сан табылмаса, бұл дата мақаласы емес: басқасын іздеңіз."},
+ en:{h:"There's no number in your sentence. Which number is the story built on?", m:"For example: \"The story rests on 3,051 deaths in Mangystau in 2019, 11.6% more than in 2017.\" If there's no number, it isn't a data story: find another one."}},
+s1chk:{kk:{h:"Тексеру тізімінің бәрі белгіленбеген.", m:"Мақалада сан жоқ, дереккөзі аталмаған не мәселе қоғамға маңызды емес болса, келесі қадамдарға жарамайды. Басқа мақала іздеңіз."},
+ en:{h:"Not every checklist item is ticked.", m:"If there's no number, no named source or the issue doesn't matter to the public, the article won't carry you through the next steps. Find another one."}},
+s1src:{kk:{h:"", m:"Дереккөз аталмаса, 2-қадамда төркінін іздеу өте қиын болады."}, en:{h:"", m:"Without a named source, tracing the origin in step 2 will be very hard."}},
+
+/* --- 4-қадам: нөлдік жол --- */
+confirm:{kk:{h:"Бұл жол гипотезаны растайтын шарт, жалған ететін шарт емес.",
+  m:"Студенттердің ең жиі қатесі осы. Растайтын мысал әрқашан табылады. Жол «гипотезам жалған» деп аяқталуы керек және нені көрсек, бас тартатынымызды айтуы керек."},
+ en:{h:"This is a condition that confirms the hypothesis, not one that would make it false.",
+  m:"This is the most common mistake. You can always find a confirming example. The line has to end with \"my hypothesis is false\" and say what result would make you drop it."}},
+nothreshold:{kk:{h:"Шек жоқ: 0,5 пайыздық өзгерістің өзі «дәлел» болып кетеді.",
+  m:"Бірнеше жұмыста бір пайызға жетпейтін өзгеріс «дәлелденді» деп алынды. Шекті алдын ала жазыңыз: «кемінде 20 пайыз», «1 пайыздық тармақтан көп». Шек болмаса, үкім шығаруға сүйенеті нәрсе жоқ."},
+ en:{h:"No threshold: a 0.5% change would count as \"proof\".",
+  m:"In several projects, changes under 1% were called \"proved\". Write the threshold in advance: \"at least 20%\", \"more than 1 percentage point\". Without one, there's nothing to base a verdict on."}},
+sourcename:{kk:{h:"Бұл дереккөздің аты, шарт емес.", m:"Дереккөз бөлек жолға жазылады. Мұнда датаның қандай нәтижесі гипотезаны құлататыны жазылады."},
+ en:{h:"That's the name of a source, not a condition.", m:"The source goes on its own line. This line says what result in the data would sink the hypothesis."}},
+restate:{kk:{h:"Бұл гипотезаның өзін қайталау.", m:"Тұжырымды қайталау оны теріске шығару емес. Сұраңыз: «Егер мен қателессем, датада не көрер едім?»"},
+ en:{h:"That just repeats the hypothesis.", m:"Repeating a claim doesn't test it. Ask: \"If I'm wrong, what would the data show?\""}},
+negation:{kk:{h:"Бұл жай терістеу: гипотезаның салыстыруы мен шегі жоғалды.",
+  m:"«Өскен жоқ» деген жол көп нәрсені өткізіп жібереді. Гипотеза салыстыру туралы болса, жалған болу шарты да салыстыру туралы болуы керек және сан шегі болуы керек."},
+ en:{h:"That's plain negation: the comparison and the threshold are gone.",
+  m:"\"It didn't grow\" lets a lot slip through. If the hypothesis is about a comparison, the condition must be too, with a numeric threshold."}},
+nodatanull:{kk:{h:"Дата табылмауы гипотезаны жалған етпейді.", m:"Бұл үшінші нәтиже: «дата жетпеді». Жалған болу шарты датаның нақты нәтижесі туралы."},
+ en:{h:"Not finding data doesn't make a hypothesis false.", m:"That's a third outcome: \"not enough data\". The falsification condition is about an actual result in the data."}},
+nullEmpty:{kk:{h:"«Егер дата ___ көрсетсе, гипотезам жалған» жолы бос.", m:"Бұл жол бос болса, гипотеза әлі жоқ. Студент жұмыстарында ең жиі кездесетін олқылық осы."},
+ en:{h:"The \"If the data shows ___, my hypothesis is false\" line is empty.", m:"Without it, you don't have a hypothesis yet. It's the most common gap in student work."}},
+nullConfirm:{kk:{h:"Жолыңыз «дұрыс» деп аяқталады: бұл растайтын шарт.", m:"Жолды «...гипотезам жалған» деп аяқтаңыз және датаның қандай нәтижесі гипотезаны құлататынын жазыңыз."},
+ en:{h:"Your line ends with \"true\": that's a confirming condition.", m:"End it with \"...my hypothesis is false\" and say which result would sink it."}},
+nullNoFalse:{kk:{h:"Жолда «гипотезам жалған» деген бөлік жоқ.", m:"Үлгі: «Егер дата өсімнің 20 пайыздан аз екенін көрсетсе, гипотезам жалған.»"},
+ en:{h:"The line doesn't say \"my hypothesis is false\".", m:"Template: \"If the data shows growth under 20%, my hypothesis is false.\""}},
+nullSource:{kk:{h:"Жолға дереккөздің аты жазылған, нәтиже жазылмаған.", m:"Дереккөз шарт емес. Шарт: датада қандай сан шықса, бас тартасыз."},
+ en:{h:"The line names a source instead of a result.", m:"A source isn't a condition. The condition is the number that would make you give up."}},
+nullRestate:{kk:{h:"Жолыңыз гипотезаның сөздерін қайталап тұр.", m:"Гипотезаны қайталау оны теріске шығару емес. Керісінше нәтижені сипаттаңыз: өзгеріс шектен аз, бағыты басқа не айырма жоқ."},
+ en:{h:"Your line repeats the words of your hypothesis.", m:"Repeating isn't testing. Describe the opposite result: change below the threshold, the other direction, or no gap."}},
+nullNoThr:{kk:{h:"Шек өрісінде сан жоқ. Бұл өріс міндетті.", m:"Шек: гипотезаны расталды деп санайтын ең кіші өзгеріс. Мысалы «5 пайыз», «1 пайыздық тармақ», «1,5 есе». Шексіз гипотезада 0,3 пайыздық өзгеріс те «дәлел» болып кетеді."},
+ en:{h:"The threshold box has no number. It's required.", m:"The threshold is the smallest change you'd accept as support: \"5%\", \"1 percentage point\", \"1.5 times\". Without it, a 0.3% change becomes \"proof\"."}},
+nullThrNotInLine:{kk:{h:"Шек бар, бірақ «егер дата...» жолында ол сан жоқ.", m:"Шекті жолдың өзіне кіргізіңіз: «Егер өсім 5 пайыздан аз болса, гипотезам жалған.»"},
+ en:{h:"You set a threshold, but the \"If the data shows...\" line doesn't use it.", m:"Put the number into the line: \"If growth is under 5%, my hypothesis is false.\""}},
+nullNoH0:{kk:{h:"Нөлдік гипотезаны (Н0) бір сөйлеммен жазыңыз.", m:"Н0: сізді құлата алатын ең қарапайым түсіндірме. Мысалы: «Мың адамға шаққандағы өлім өзгерген жоқ, тек халық көбейді.»"},
+ en:{h:"Write your null hypothesis (H0) in one sentence.", m:"H0 is the simplest explanation that could kill your hypothesis. For example: \"The death rate per 1,000 didn't change; the population just grew.\""}},
+
+/* --- 5-қадам: сан --- */
+divnew:{kk:{h:"Жаңа санға бөлгенсіз. ЖЕБЕ: ескі санға бөлінеді.", m:"(Жаңа − Ескі) ÷ Ескі × 100. Бөлгіш әрқашан бастапқы жылдың саны."},
+ en:{h:"You divided by the new number. DART divides by the old one (the reference).", m:"(New − Old) ÷ Old × 100. The denominator is always the starting year."}},
+no100:{kk:{h:"100-ге көбейту ұмытылған: бұл үлес, пайыз емес.", m:"0,116 деген 11,6 пайыз. ЖЕБЕ-нің соңғы қадамы × 100."},
+ en:{h:"You forgot × 100: that's a share, not a percentage.", m:"0.116 is 11.6%. The last move of DART is × 100."}},
+diffonly:{kk:{h:"Бұл айырма ғана (Жаңа − Ескі). Енді ескі санға бөліп, 100-ге көбейтіңіз.", m:"Айырма абсолют өзгерісті береді. Пайыздық өзгеріс үшін оны бастапқы санға бөлесіз."},
+ en:{h:"That's only the difference (New − Old). Now divide by the old number and multiply by 100.", m:"The difference is the absolute change. For a percentage change, divide it by the starting number."}},
+ratio:{kk:{h:"Бұл қатынас (Жаңа ÷ Ескі × 100). Одан 100-ді алып тастаңыз.", m:"111,6 деген «2017 жылғы әр 100 адамға 2019 жылы 111,6 адам», яғни өсім 11,6 пайыз."},
+ en:{h:"That's the ratio (New ÷ Old × 100). Subtract 100.", m:"111.6 means \"for every 100 in 2017, 111.6 in 2019\", i.e. growth of 11.6%."}},
+wrongrow:{kk:{h:"Бұл басқа жолдың мәні. Кестеде дұрыс жолды (Маңғыстау не Қазақстан) алыңыз.", m:""},
+ en:{h:"That's the value for the other row. Use the right row (Mangystau or Kazakhstan).", m:""}},
+pcGen:{kk:{h:"Сәйкес емес. ЖЕБЕ-ні қадаммен қайталаңыз: Жаңа − Ескі, ескіге бөлу, × 100.", m:"Есеп:"},
+ en:{h:"Doesn't match. Redo DART step by step: New − Old, divide by Old, × 100.", m:"Working:"}},
+rateGen:{kk:{h:"Сәйкес емес. Формула: қайтыс болғандар ÷ сол жылдың халқы × 1000.", m:"Есеп:"},
+ en:{h:"Doesn't match. Formula: deaths ÷ population of the same year × 1,000.", m:"Working:"}},
+avgpop:{kk:{h:"Бұл бюроның ресми коэффициенті: ол жылдың орташа халқымен есептеледі. Тапсырмада жыл басындағы халықты алыңыз. Есептеу әдісі дұрыс, жауап есептелді.", m:""},
+ en:{h:"That's the Bureau's official rate: it uses the average annual population. Here we use start-of-year population. Your method is right, so it counts.", m:""}},
+per100:{kk:{h:"100-ге көбейткенсіз. Мұнда мың адамға шағамыз: × 1000.", m:""}, en:{h:"You multiplied by 100. Here we use per 1,000: × 1,000.", m:""}},
+per1:{kk:{h:"× 1000 ұмытылған: бұл бір адамға келетін үлес.", m:"Сан ÷ халық өте кішкентай сан береді. 1000-ға көбейткенде «мың адамға неше адам» шығады."},
+ en:{h:"You forgot × 1,000: that's the share per person.", m:"Count ÷ population is tiny. Multiplying by 1,000 gives \"per 1,000 people\"."}},
+per100k:{kk:{h:"100 000-ға көбейткенсіз. Мұнда мың адамға шағамыз.", m:""}, en:{h:"You multiplied by 100,000. Here we use per 1,000.", m:""}},
+inverted:{kk:{h:"Бөлшек төңкерілген: халық ÷ сан емес, сан ÷ халық.", m:"Алымында қайтыс болғандар, бөлімінде халық."},
+ en:{h:"The fraction is upside down: count ÷ population, not population ÷ count.", m:"Deaths on top, population below."}},
+wrongyear:{kk:{h:"Халық санын басқа жылдан алғансыз. Өлім мен халық бір жылдан болуы керек.", m:""},
+ en:{h:"You took the population from a different year. Deaths and population must be from the same year.", m:""}},
+absnotrate:{kk:{h:"Бұл абсолют санның өзгерісі (11,6). Сұрақ мың адамға шаққан көрсеткіштің өзгерісі туралы.", m:"4,25 пен 4,49-ды ЖЕБЕ-ге салыңыз. Абсолют сан мен көрсеткіштің айырмасы осы тапсырманың өзегі."},
+ en:{h:"That's the change in the absolute number (11.6). The question asks about the change in the rate per 1,000.", m:"Run DART on 4.25 and 4.49. The gap between count and rate is the whole point here."}},
+ppNotPct:{kk:{h:"Бұл айырма (4,49 − 4,25), пайыздық өзгеріс емес.", m:"0,24 деген мың адамға шаққандағы айырма. Пайыз үшін оны 4,25-ке бөліп, 100-ге көбейтіңіз."},
+ en:{h:"That's the difference (4.49 − 4.25), not a percentage change.", m:"0.24 is the gap per 1,000. For a percentage, divide by 4.25 and multiply by 100."}},
+popchange:{kk:{h:"Бұл халықтың өсімі (5,5). Сізге көрсеткіштің өсімі керек.", m:"Екеуі жақын, бірақ әртүрлі сан. Көрсеткіштің өсімі шамамен 5,6–5,8."},
+ en:{h:"That's population growth (5.5). You need the change in the rate.", m:"Close, but a different number. The rate rose roughly 5.6–5.8%."}},
+
+/* --- 5-қадам: шешім --- */
+decRejWrong:{kk:{h:"Сандарға қараңыз: Маңғыстауда көрсеткіш 5,8 пайыз өсті, ел бойынша өзгерген жоқ.", m:"Айырма 5,8 пайыздық тармақ, шек 1. Шектен асты, сондықтан бұл кезең үшін гипотеза расталды."},
+ en:{h:"Look at the numbers: Mangystau's rate rose 5.8%, the national rate didn't move.", m:"The gap is 5.8 points, the threshold is 1. It's above the threshold, so for this period the hypothesis is supported."}},
+decHaveData:{kk:{h:"Кестеде шешім шығаруға жететін дата бар.", m:"«Дата жетпеді» деген нәтижені тек дата шынымен жоқ кезде қоямыз. Бұл жерде екі жылдың да өлімі мен халқы бар."},
+ en:{h:"The table has enough data to decide.", m:"\"Not enough data\" is only for when the data really isn't there. Here you have deaths and population for every year."}},
+decBaseYear:{kk:{h:"Әр жылды есептеңіз: 2016, 2017, 2018, 2019. Көрсеткіш жыл сайын өсті ме?", m:"4,46, 4,25, 4,55, 4,49. 2017 мен 2019 жылы көрсеткіш түскен. Бастапқы жыл ретінде 2017 таңдалса, өсім үлкен көрінеді, ал 2016 жылдан қарасақ, өсім 1 пайызға жетпейді."},
+ en:{h:"Work out every year: 2016, 2017, 2018, 2019. Did the rate rise each year?", m:"4.46, 4.25, 4.55, 4.49. The rate fell in 2017 and 2019. Starting from 2017 makes the rise look big; from 2016 it's under 1%."}},
+decCausal:{kk:{h:"Кестеде деңгейдің төмендігі көрінеді, бірақ «себебі» бөлігін ештеңе көрсетпейді.", m:"Себеп туралы бөлікті тексеру үшін жас құрамы керек. Ол жоқ, сондықтан дата жетпеді."},
+ en:{h:"The table shows the lower rate, but nothing shows the \"because\".", m:"Testing the cause needs age data. You don't have it, so there isn't enough data."}},
+decNoEvidence:{kk:{h:"Жоққа шығару үшін де дата керек. Кестеде жас туралы ештеңе жоқ.", m:"Гипотезаның себеп бөлігін не растайтын, не жоққа шығаратын сан бұл кестеде жоқ."},
+ en:{h:"Rejecting it needs data too. There's nothing about age in the table.", m:"Nothing in this table can support or reject the \"because\" part."}},
+
+/* --- 6-қадам --- */
+notalt:{kk:{h:"Бұл дата негізгі балама түсіндірмені жоққа шығармайды.", m:"Өзіңізден сұраңыз: гипотезам жалған болса, мұны ең оңай түсіндіретін не? Халық саны ма, баға ма, шекара ма, әдіс пе? Сол түсіндірмені тексеретін дата керек."},
+ en:{h:"This dataset doesn't rule out the main alternative explanation.", m:"Ask yourself: if I'm wrong, what's the simplest explanation? Population, prices, boundaries or a change of method? You need data that tests that."}},
+popNotHere:{kk:{h:"Халық саны мұнда басты балама емес.", m:"Бір жылда халық екі есе өспейді, ал ақша туралы көрсеткіште басты тұзақ халық емес, баға."},
+ en:{h:"Population isn't the main alternative here.", m:"Populations don't double in a year, and with money figures the main trap is prices, not population."}},
+migFirst:{kk:{h:"Көші-қон ақылға қонымды, бірақ бір жылда үштен бірге азаю тым көп.", m:"Мұндай секіріс алдымен шекараның не әдістің өзгергенін білдіреді. Кестенің ескертпесін оқыңыз."},
+ en:{h:"Migration is plausible, but losing a third in one year is too much.", m:"A jump like that usually means boundaries or method changed. Read the table's footnotes first."}},
+
+/* --- 7-қадам --- */
+stLeadNum:{kk:{h:"Лидте сан жоқ.", m:"Лид негізгі табылымды бір санмен айтады. Үлгідегі лидті қараңыз."}, en:{h:"No number in the lead.", m:"The lead states the main finding with one number. See the model lead."}},
+stNutNum:{kk:{h:"Нат-графта сан жоқ.", m:""}, en:{h:"No number in the nut graf.", m:""}},
+stNutCmp:{kk:{h:"Нат-графта салыстыру жоқ (ел бойынша, басқа облыс, басқа жыл).", m:"Үлгіде: «ал ел бойынша бұл көрсеткіш 7,21 деңгейінде қалды»."}, en:{h:"No comparison in the nut graf (national, another region, another year).", m:"In the model: \"while the national rate stayed flat at 7.21\"."}},
+stNutDoubt:{kk:{h:"Нат-графта күмән жоқ: санның шегін не әлсіз жерін айтыңыз.", m:"Адал стори өз санының шегін айтады: «бірақ», «алайда». Үлгіде: бастапқы жыл әдеттен төмен болған."}, en:{h:"No doubt in the nut graf: say where the number is limited.", m:"An honest story names its limits: \"but\", \"however\". In the model: the starting year was unusually low."}},
+stNutNext:{kk:{h:"Нат-графта келесі тексеру жоқ.", m:"Не тексерілмей қалды? Үлгіде: халықтың жас құрамы мен өлім себептері."}, en:{h:"No next check in the nut graf.", m:"What's still untested? In the model: age structure and causes of death."}},
+stCausal:{kk:{h:"Мәтінде себеп тұжырым ретінде айтылған. Датада себеп жоқ болса, «болуы мүмкін» деп жазыңыз да, қалай тексерілетінін айтыңыз.", m:""},
+ en:{h:"Your text states a cause as fact. If the data doesn't show it, write \"may\" and say how it could be checked.", m:""}},
+stSrc:{kk:{h:"Дереккөз жолында органның аты, кестенің атауы және жылдары болуы керек.", m:"Үлгі: «Дереккөз: Ұлттық статистика бюросы, «Қайтыс болғандар саны» кестесі, 2016–2019.»"},
+ en:{h:"The source line needs the body, the table name and the years.", m:"Template: \"Source: Bureau of National Statistics, table 'Number of deaths', 2016–2019.\""}}
+};
+
+</script>
+<script>
+/* ===== Гипотеза тренажері: қозғалтқыш. Мазмұн tx_kk.js, tx_en.js, data.js ішінде. =====
+   Ешқандай дерек сыртқа жіберілмейді. localStorage тек ыңғайлылық үшін (try/catch ішінде). */
+const $ = id => document.getElementById(id);
+const KEY = "jur401_hyp_trainer_v1";
+let LANG = "kk";
+let S = {v:{}, pick:{}, tries:{}, checked:{}, score:{}};
+
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){
+  try{ const s = JSON.parse(localStorage.getItem(KEY) || "null");
+    if(s && s.v) S = Object.assign({v:{}, pick:{}, tries:{}, checked:{}, score:{}}, s); }catch(e){}
+  try{ const l = localStorage.getItem(KEY + "_lang"); if(l === "en" || l === "kk") LANG = l; }catch(e){}
+}
+const t = (k, ...a) => { let v = TX[LANG][k]; if(v === undefined) v = TX.kk[k]; if(v === undefined) return "";
+  return typeof v === "function" ? v(...a) : v; };
+const L = o => o == null ? "" : (typeof o === "string" ? o : (o[LANG] != null ? o[LANG] : o.kk));
+const E = (code, part) => { const e = ERR[code]; if(!e) return ""; return L(e[part]); };
+const num = v => parseFloat(String(v).replace(/\s/g, "").replace("%", "").replace(",", "."));
+function fmt(x, d){ const s = Number(x).toLocaleString(LANG === "kk" ? "ru-RU" : "en-US", {minimumFractionDigits:d, maximumFractionDigits:d});
+  return s.replace(/ /g, " "); }
+const val = k => (S.v[k] == null ? "" : String(S.v[k])).trim();
+function el(tag, cls, html){ const e = document.createElement(tag); if(cls) e.className = cls; if(html != null) e.innerHTML = html; return e; }
+
+/* ---------- кері байланыс блогы ---------- */
+function showFb(box, kind, msg, more, extra){
+  box.className = "fb " + kind; box.innerHTML = "";
+  const pre = kind === "ok" ? "✓ " : kind === "warn" ? "⚠ " : "✗ ";
+  box.appendChild(el("div", null, pre + msg));
+  if(extra) box.appendChild(el("div", "extra", extra));
+  if(more){ const m = el("div", "more"); m.appendChild(el("b", null, t("more"))); m.appendChild(el("div", null, more)); box.appendChild(m); }
+}
+function showList(box, kind, head, items, mores){
+  box.className = "fb " + kind; box.innerHTML = "";
+  box.appendChild(el("div", null, (kind === "ok" ? "✓ " : kind === "warn" ? "⚠ " : "✗ ") + head));
+  if(items.length){ const ul = el("ul"); items.forEach(i => ul.appendChild(el("li", null, i))); box.appendChild(ul); }
+  if(mores && mores.length){ const m = el("div", "more"); m.appendChild(el("b", null, t("more")));
+    mores.forEach(x => m.appendChild(el("p", null, x))); box.appendChild(m); }
+}
+function bump(key, count){ if(count) S.tries[key] = (S.tries[key] || 0) + 1; return S.tries[key] || 0; }
+
+/* ---------- таңдау жаттығулары (mcq және sort) ---------- */
+function optsOf(key, item){ const ex = EX[key]; return ex.cats ? ex.cats : item.opts; }
+function renderEx(key){
+  const ex = EX[key], box = $("ex_" + key); if(!box) return; box.innerHTML = "";
+  ex.items.forEach((it, n) => {
+    const d = el("div", "item");
+    const q = el("div", "q", (n + 1) + ". " + L(it.q) + (it.sec ? '<span class="sec">' + L(OPTS.sectors.find(s => s.id === it.sec).t) + "</span>" : ""));
+    d.appendChild(q);
+    const o = el("div", "opts" + (ex.cats ? "" : " col"));
+    optsOf(key, it).forEach(op => {
+      const lab = el("label"); const r = document.createElement("input");
+      r.type = "radio"; r.name = key + "_" + it.id; r.value = op.id;
+      const pk = key + "." + it.id;
+      if(S.pick[pk] === op.id){ r.checked = true; lab.classList.add("sel"); }
+      r.onchange = () => { S.pick[pk] = op.id; save(); o.querySelectorAll("label").forEach(x => x.classList.remove("sel")); lab.classList.add("sel"); updateWs(); };
+      lab.appendChild(r); lab.appendChild(el("span", null, L(op.t))); o.appendChild(lab);
+    });
+    d.appendChild(o);
+    const f = el("div", "fb"); f.id = "fb_" + key + "_" + it.id; d.appendChild(f);
+    box.appendChild(d);
+  });
+}
+function sortCode(it, pick){
+  if(it.ans === "topic") return "topic";
+  if(it.ans === "question") return "question";
+  if(it.ans === "weak") return pick === "strong" ? it.code : "isclaim";
+  return pick === "weak" ? "strongok" : "isclaim";
+}
+function checkEx(key, count){
+  const ex = EX[key]; let ok = 0;
+  ex.items.forEach(it => {
+    const pk = key + "." + it.id, pick = S.pick[pk], f = $("fb_" + key + "_" + it.id);
+    if(!f) return;
+    if(!pick){ showFb(f, "bad", t("choose")); return; }
+    if(pick === it.ans){ ok++; showFb(f, "ok", L(it.why)); return; }
+    const n = bump(pk, count);
+    const code = ex.cats ? sortCode(it, pick) : (optsOf(key, it).find(o => o.id === pick) || {}).code;
+    showFb(f, "bad", E(code, "h") || t("tryAgain"), n >= 2 ? [L(it.hint2 || it.why), E(code, "m")].filter(Boolean).join(" ") : null);
+  });
+  S.checked[key] = true; S.score[key] = ok + "/" + ex.items.length; save();
+  $("sc_" + key).textContent = t("score", ok, ex.items.length);
+  updateWs();
+}
+
+/* ---------- 5-қадам: кесте және сан жаттығуы ---------- */
+function renderTable(){
+  const D = DATA, b = $("t_table"); const yrs = [2016, 2017, 2018, 2019];
+  let h = '<table class="ex"><thead><tr><th>' + t("tYear") + "</th><th>" + t("tMD") + "</th><th>" + t("tMP") + "</th><th>" + t("tKD") + "</th><th>" + t("tKP") + "</th></tr></thead><tbody>";
+  yrs.forEach(y => { h += "<tr><td>" + y + "</td><td>" + fmt(D.M.d[y], 0) + "</td><td>" + fmt(D.M.p[y], 0) + "</td><td>" + fmt(D.K.d[y], 0) + "</td><td>" + fmt(D.K.p[y], 0) + "</td></tr>"; });
+  b.innerHTML = h + "</tbody></table>";
+}
+function renderNum(){
+  const b = $("ex_num"); b.innerHTML = "";
+  NUM.forEach((it, n) => {
+    const w = el("div", "num");
+    const lab = el("label", null, (n + 1) + ". " + L(it.q)); lab.htmlFor = "n_" + it.id;
+    const inp = document.createElement("input"); inp.id = "n_" + it.id; inp.inputMode = "decimal"; inp.autocomplete = "off";
+    inp.value = S.v["n_" + it.id] || "";
+    inp.oninput = () => { S.v["n_" + it.id] = inp.value; save(); };
+    const f = el("div", "fb"); f.id = "fb_n_" + it.id;
+    w.appendChild(lab); w.appendChild(inp); w.appendChild(f); b.appendChild(w);
+  });
+}
+function checkNum(count){
+  let ok = 0;
+  NUM.forEach(it => {
+    const f = $("fb_n_" + it.id), raw = S.v["n_" + it.id], x = num(raw), key = "n." + it.id;
+    if(raw == null || String(raw).trim() === ""){ showFb(f, "bad", t("needNum")); return; }
+    if(!isFinite(x)){ showFb(f, "bad", t("needNum")); return; }
+    if(x >= it.lo && x <= it.hi){ ok++; showFb(f, "ok", L(it.why)); return; }
+    const c = (it.cands || []).find(c => Math.abs(x - c.v) <= (c.tol != null ? c.tol : Math.max(0.011, Math.abs(c.v) * 0.004)));
+    if(c && c.ok){ ok++; showFb(f, "warn", E(c.code, "h"), null, L(it.why)); return; }
+    const n = bump(key, count), code = c ? c.code : it.gen;
+    showFb(f, "bad", E(code, "h"), n >= 2 ? [E(code, "m"), L(it.calc)].filter(Boolean).join(" ") : null);
+  });
+  S.checked.num = true; S.score.num = ok + "/" + NUM.length; save();
+  $("sc_num").textContent = t("score", ok, NUM.length);
+  updateWs();
+}
+
+/* ---------- 1-қадам: мақала ---------- */
+function checkS1(count){
+  const iss = [], codes = [];
+  if(!val("art_sector")){ iss.push(E("s1sector", "h")); codes.push("s1sector"); }
+  if(!/^https?:\/\/[^\s.]+\.[^\s]+/i.test(val("art_link"))){ iss.push(E("s1link", "h")); codes.push("s1link"); }
+  if(!/\d/.test(val("art_number"))){ iss.push(E("s1num", "h")); codes.push("s1num"); }
+  if(!S.v.art_c1 || !S.v.art_c2 || !S.v.art_c3 || !S.v.art_c4){ iss.push(E("s1chk", "h")); codes.push("s1chk"); }
+  if(!S.v.art_c2){ codes.push("s1src"); }
+  const f = $("f_s1");
+  if(!iss.length){ showFb(f, "ok", t("s1ok")); S.checked.s1 = true; save(); return; }
+  const n = bump("s1", count);
+  showList(f, "bad", t("fixThese"), iss, n >= 2 ? [...new Set(codes)].map(c => E(c, "m")).filter(Boolean) : null);
+  save();
+}
+
+/* ---------- 2-қадам: өз датаңыздың төркіні ---------- */
+function yearsOf(s){ const m = String(s).match(/(19|20)\d\d/g); return m ? m.map(Number) : []; }
+function checkS2(count){
+  const iss = [], codes = [], f = $("f_s2"), ty = val("or_type");
+  if(!val("or_body")){ iss.push(E("s2body", "h")); codes.push("s2body"); }
+  if(!val("or_table")){ iss.push(E("s2table", "h")); codes.push("s2table"); }
+  if(yearsOf(val("or_years")).length < 2){ iss.push(E("s2years", "h")); codes.push("s2years"); }
+  if(!val("or_level")){ iss.push(E("s2level", "h")); codes.push("s2level"); }
+  if(!ty){ iss.push(E("s2type", "h")); codes.push("s2type"); }
+  const red = ["press", "article", "person", "pct"].includes(ty);
+  if(red){ iss.unshift(E("srcRed", "h")); codes.unshift("srcRed"); }
+  if(val("or_primary") === "second"){ iss.push(E("srcSecond", "h")); codes.push("srcSecond"); }
+  if(val("or_primary") === "unknown"){ iss.push(E("srcUnknown", "h")); codes.push("srcUnknown"); }
+  if(!iss.length){ showFb(f, "ok", ty === "report" ? t("s2okYellow") : t("s2ok")); S.checked.s2 = true; save(); updateWs(); return; }
+  const n = bump("s2", count);
+  showList(f, red ? "bad" : "warn", red ? t("s2red") : t("fixThese"), iss, n >= 2 ? [...new Set(codes)].map(c => E(c, "m")).filter(Boolean) : null);
+  save(); updateWs();
+}
+
+/* ---------- 3-қадам: гипотеза құрастырғыш ---------- */
+function preview(){
+  const g = k => val(k) ? "<b>" + esc(val(k)) + "</b>" : '<span class="gap">[' + t("gap_" + k) + "]</span>";
+  const per = (val("b_from") || val("b_to")) ? "<b>" + esc(val("b_from") || "?") + "–" + esc(val("b_to") || "?") + "</b>" : '<span class="gap">[' + t("gap_period") + "]</span>";
+  let h = t("previewTpl", per, g("b_where"), g("b_what"), g("b_change"), g("b_cmp"));
+  if(val("b_why")) h += " <i>" + t("previewWhy", esc(val("b_why"))) + "</i>";
+  $("b_preview").innerHTML = h;
+}
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;"}[c])); }
+function plainPreview(){ return $("b_preview").textContent.replace(/\[[^\]]*\]/g, "...").replace(/\s+/g, " ").trim(); }
+const LEVEL_RANK = {country:0, oblast:1, city:2, district:2, inst:3};
+function hypIssues(){
+  const txt = val("hyp_final"), out = [];
+  const add = (code, kind) => out.push({code, kind: kind || "bad"});
+  const R = RULES;
+  if(!txt){ add("hypEmpty"); return out; }
+  if(R.question.test(txt)) add("question");
+  if(R.plan.test(txt)) add("plan");
+  if(txt.split(/\s+/).length < 6) add("topic");
+  const yrs = yearsOf(txt);
+  if(yrs.length < 2) add("noperiod");
+  if(!val("b_where")) add("noplace");
+  if(!R.compare.test(txt) && !val("b_cmp")) add("nocompare");
+  if(!val("b_kind")) add("kindmissing");
+  else if(val("b_kind") === "count" && (R.compare.test(txt) || val("b_cmp"))) add("absrate", "warn");
+  if(!val("b_unit")) add("nounit", "warn");
+  if(R.causal.test(txt) || val("b_why")) add("causal", "warn");
+  if(R.vague.test(txt)) add("vague", "warn");
+  if(R.two.test(txt)) add("twoclaims", "warn");
+  const oy = yearsOf(val("or_years"));
+  if(yrs.length >= 2 && oy.length >= 2){ const lo = Math.min(...oy), hi = Math.max(...oy);
+    if(Math.min(...yrs) < lo || Math.max(...yrs) > hi) add("fitperiod"); }
+  const bl = val("b_level"), ol = val("or_level");
+  if(bl && ol && LEVEL_RANK[bl] > LEVEL_RANK[ol]) add("fitlevel");
+  if(bl && ol && bl !== ol && LEVEL_RANK[bl] === LEVEL_RANK[ol]) add("fitlevel", "warn");
+  return out;
+}
+function checkS3(count){
+  const f = $("f_s3"), iss = hypIssues();
+  if(!iss.length){ showFb(f, "ok", t("s3ok")); S.checked.s3 = true; save(); updateWs(); return; }
+  const hard = iss.filter(i => i.kind === "bad");
+  const n = hard.length ? bump("s3", count) : (S.tries.s3 || 0);
+  showList(f, hard.length ? "bad" : "warn", hard.length ? t("fixThese") : t("s3warn"),
+    iss.map(i => (i.kind === "warn" ? "⚠ " : "") + E(i.code, "h")),
+    (n >= 2 || !hard.length) ? iss.map(i => E(i.code, "m")).filter(Boolean) : null);
+  save(); updateWs();
+}
+
+/* ---------- 4-қадам: өз нөлдік гипотезаңыз ---------- */
+function words(s){ return new Set(String(s).toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(w => w.length > 3)); }
+function overlap(a, b){ const A = words(a), B = words(b); if(!A.size || !B.size) return 0; let n = 0; A.forEach(w => { if(B.has(w)) n++; }); return n / Math.min(A.size, B.size); }
+function checkS4(count){
+  const f = $("f_s4"), line = val("null_line"), thr = val("null_thr"), iss = [];
+  const R = RULES;
+  if(!line) iss.push("nullEmpty");
+  else{
+    if(R.confirm.test(line)) iss.push("nullConfirm");
+    else if(!R.falsePhrase.test(line)) iss.push("nullNoFalse");
+    if(R.source.test(line) && !/\d/.test(line)) iss.push("nullSource");
+    if(val("hyp_final") && overlap(line, val("hyp_final")) > 0.8 && !R.negation.test(line)) iss.push("nullRestate");
+  }
+  if(!/\d/.test(thr)) iss.push("nullNoThr");
+  else if(!/\d/.test(line)) iss.push("nullThrNotInLine");
+  if(!val("null_h0")) iss.push("nullNoH0");
+  if(!iss.length){ showFb(f, "ok", t("s4ok")); S.checked.s4 = true; save(); updateWs(); return; }
+  const n = bump("s4", count);
+  showList(f, "bad", t("fixThese"), iss.map(c => E(c, "h")), n >= 2 ? iss.map(c => E(c, "m")).filter(Boolean) : null);
+  save(); updateWs();
+}
+
+/* ---------- 7-қадам: өз үш сөйлеміңіз ---------- */
+function checkS7(count){
+  const f = $("f_s7"), R = RULES, iss = [];
+  const lead = val("st_lead"), nut = val("st_nut"), src = val("st_src");
+  if(!/\d/.test(lead)) iss.push("stLeadNum");
+  if(!/\d/.test(nut)) iss.push("stNutNum");
+  if(!R.compare.test(nut)) iss.push("stNutCmp");
+  if(!R.doubt.test(nut)) iss.push("stNutDoubt");
+  if(!R.next.test(nut)) iss.push("stNutNext");
+  if(R.causal.test(lead + " " + nut)) iss.push("stCausal");
+  if(!R.source.test(src) || yearsOf(src).length < 1) iss.push("stSrc");
+  if(!iss.length){ showFb(f, "ok", t("s7ok")); S.checked.s7 = true; save(); updateWs(); return; }
+  const n = bump("s7", count);
+  showList(f, "bad", t("fixThese"), iss.map(c => E(c, "h")), n >= 2 ? iss.map(c => E(c, "m")).filter(Boolean) : null);
+  save(); updateWs();
+}
+
+/* ---------- жұмыс парағы ---------- */
+function optLabel(list, id){ const o = (OPTS[list] || []).find(x => x.id === id); return o ? L(o.t) : ""; }
+function wsText(){
+  const W = (k) => val(k) || t("wsEmpty");
+  const lines = [];
+  const H = s => { lines.push(""); lines.push(s); lines.push("-".repeat(Math.min(60, s.length))); };
+  lines.push(t("h1")); lines.push(t("sub"));
+  if(val("ws_name")) lines.push(t("ws_nameL") + ": " + val("ws_name"));
+  lines.push(t("wsDate") + ": " + new Date().toISOString().slice(0, 10));
+  H(t("s1h"));
+  lines.push(t("art_sectorL") + ": " + (optLabel("sectors", val("art_sector")) || t("wsEmpty")));
+  lines.push(t("art_linkL") + ": " + W("art_link"));
+  lines.push(t("art_numberL") + ": " + W("art_number"));
+  lines.push(t("wsChecklist") + ": " + [1, 2, 3, 4].map(i => (S.v["art_c" + i] ? "[x] " : "[ ] ") + t("art_c" + i).replace(/<[^>]+>/g, "")).join(" · "));
+  H(t("s2h"));
+  ["or_body", "or_table", "or_years"].forEach(k => lines.push(t(k + "L") + ": " + W(k)));
+  lines.push(t("or_levelL") + ": " + (optLabel("levels", val("or_level")) || t("wsEmpty")));
+  lines.push(t("or_typeL") + ": " + (optLabel("srcTypes", val("or_type")) || t("wsEmpty")));
+  lines.push(t("or_primaryL") + ": " + (optLabel("primary", val("or_primary")) || t("wsEmpty")));
+  H(t("s3h"));
+  lines.push(t("wsBuilder") + ": " + plainPreview());
+  lines.push(t("b_kindL") + ": " + (optLabel("kinds", val("b_kind")) || t("wsEmpty")) + " · " + t("b_unitL") + ": " + W("b_unit"));
+  if(val("b_why")) lines.push(t("b_whyL") + ": " + val("b_why") + " (" + t("wsWhyFlag") + ")");
+  lines.push(t("hyp_finalL") + ": " + W("hyp_final"));
+  H(t("s4h"));
+  lines.push(t("null_lineL") + ": " + W("null_line"));
+  lines.push(t("null_thrL") + ": " + W("null_thr"));
+  lines.push(t("null_h0L") + ": " + W("null_h0"));
+  H(t("s5h"));
+  lines.push(t("own_numbersL") + ": " + W("own_numbers"));
+  lines.push(t("own_verdictL") + ": " + (optLabel("verdicts", val("own_verdict")) || t("wsEmpty")) + (val("own_verdict_num") ? " · " + val("own_verdict_num") : ""));
+  H(t("s6h"));
+  lines.push(t("ex_altL") + ": " + W("ex_alt"));
+  lines.push(t("ex_data2L") + ": " + W("ex_data2"));
+  H(t("s7h"));
+  lines.push(t("st_leadL") + ": " + W("st_lead"));
+  lines.push(t("st_nutL") + ": " + W("st_nut"));
+  lines.push(t("st_srcL") + ": " + W("st_src"));
+  H(t("wsScores"));
+  ["origin", "sort", "null", "num", "dec", "extra"].forEach(k => lines.push(t("wsEx_" + k) + ": " + (S.score[k] || t("wsNotDone"))));
+  lines.push(""); lines.push(t("wsFooter"));
+  return lines.join("\n");
+}
+function updateWs(){ $("ws_out").textContent = wsText(); }
+function copyWs(){
+  const s = wsText(), f = $("f_ws");
+  const done = () => showFb(f, "ok", t("wsCopied"));
+  const fallback = () => { const ta = document.createElement("textarea"); ta.value = s; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); done(); }catch(e){ showFb(f, "bad", t("wsCopyFail")); } ta.remove(); };
+  try{ if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(s).then(done, fallback); else fallback(); }catch(e){ fallback(); }
+}
+function dlWs(){
+  const blob = new Blob(["﻿" + wsText()], {type:"text/plain;charset=utf-8"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+  a.download = t("wsFile") + (val("ws_name") ? "_" + val("ws_name").replace(/[^\p{L}\p{N}]+/gu, "_") : "") + ".txt";
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function clearAll(){
+  if(!confirm(t("wsClearQ"))) return;
+  S = {v:{}, pick:{}, tries:{}, checked:{}, score:{}}; save(); location.reload();
+}
+
+/* ---------- тіл және бастапқы жүктеу ---------- */
+function fillSelect(sel, list){
+  const cur = S.v[sel.dataset.k] || ""; sel.innerHTML = "";
+  const o0 = document.createElement("option"); o0.value = ""; o0.textContent = t("choose"); sel.appendChild(o0);
+  list.forEach(x => { const o = document.createElement("option"); o.value = x.id; o.textContent = L(x.t); sel.appendChild(o); });
+  sel.value = cur;
+}
+function applyLang(){
+  document.documentElement.lang = LANG === "kk" ? "kk" : "en";
+  document.title = t("title");
+  document.querySelectorAll("[data-i]").forEach(e => { e.innerHTML = t(e.dataset.i); });
+  document.querySelectorAll("[data-ph]").forEach(e => { e.placeholder = t(e.dataset.ph); });
+  document.querySelectorAll("select[data-opts]").forEach(s => fillSelect(s, OPTS[s.dataset.opts]));
+  fillSelect($("art_sector"), OPTS.sectors);
+  $("lkk").classList.toggle("on", LANG === "kk"); $("len").classList.toggle("on", LANG === "en");
+  $("nav").innerHTML = TX[LANG].nav.map((n, i) => '<a href="#' + (i < 7 ? "s" + (i + 1) : "ws") + '">' + n + "</a>").join("");
+  ["origin", "sort", "null", "dec", "extra"].forEach(renderEx);
+  renderTable(); renderNum();
+  $("story").innerHTML = L(STORY);
+  preview();
+  $("s4hyp").textContent = val("hyp_final") ? t("s4yourHyp") + " " + val("hyp_final") : t("s4noHyp");
+  // бұрын тексерілген жаттығудың кері байланысын жаңа тілде қайта көрсету (әрекет саны өзгермейді)
+  ["origin", "sort", "null", "dec", "extra"].forEach(k => { if(S.checked[k]) checkEx(k, false); else $("sc_" + k).textContent = ""; });
+  if(S.checked.num) checkNum(false); else $("sc_num").textContent = "";
+  [["s1", checkS1], ["s2", checkS2], ["s3", checkS3], ["s4", checkS4], ["s7", checkS7]].forEach(([k, fn]) => { if(S.tries[k] || S.checked[k]) fn(false); });
+  updateWs();
+}
+function setLang(l){ LANG = l; try{ localStorage.setItem(KEY + "_lang", l); }catch(e){} applyLang(); }
+
+function bindInputs(){
+  document.querySelectorAll("[data-k]").forEach(e => {
+    const k = e.dataset.k;
+    if(e.type === "checkbox"){ e.checked = !!S.v[k]; e.onchange = () => { S.v[k] = e.checked; save(); updateWs(); }; return; }
+    if(e.tagName !== "SELECT") e.value = S.v[k] || "";
+    const h = () => { S.v[k] = e.value; save(); if(k.startsWith("b_")) preview(); if(k === "hyp_final") $("s4hyp").textContent = t("s4yourHyp") + " " + e.value; updateWs(); };
+    e.addEventListener("input", h); e.addEventListener("change", h);
+  });
+}
+function init(){
+  load();
+  bindInputs();
+  $("lkk").onclick = () => setLang("kk"); $("len").onclick = () => setLang("en");
+  document.querySelectorAll("[data-check]").forEach(b => b.onclick = () => checkEx(b.dataset.check, true));
+  $("b_s1").onclick = () => checkS1(true);
+  $("b_s2").onclick = () => checkS2(true);
+  $("b_s3").onclick = () => checkS3(true);
+  $("b_s4").onclick = () => checkS4(true);
+  $("b_s7").onclick = () => checkS7(true);
+  $("b_num").onclick = () => checkNum(true);
+  $("b_fill").onclick = () => { const p = plainPreview(); if(val("hyp_final") && !confirm(t("fillQ"))) return;
+    $("hyp_final").value = p; S.v.hyp_final = p; save(); $("s4hyp").textContent = t("s4yourHyp") + " " + p; updateWs(); };
+  $("ws_copy").onclick = copyWs; $("ws_dl").onclick = dlWs; $("ws_clear").onclick = clearAll;
+  applyLang();
+}
+init();
+
+</script>
+</body>
+</html>
